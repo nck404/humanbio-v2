@@ -7,10 +7,7 @@
 		{"id":"8646191bc10256b5","type":"text","text":"Google capcha ","x":-1005,"y":-1230,"width":250,"height":60},
 		{"id":"be678d580c3b157d","type":"text","text":"Auth","x":-1260,"y":-1270,"width":155,"height":60,"color":"#0274ed"},
 		{"id":"78f3b3e65e16e994","type":"text","text":"## backend\n- Tech stack : Flask + JWT auth\n- Database : Mysqlite \n\t-DBMS: Beekeeper\n\t + DB schema maker : PySQL","x":-1735,"y":-1171,"width":340,"height":197},
-		{"id":"55bffa975918a63a","type":"file","file":"png/Beekeeper.png","x":-1500,"y":-1620,"width":400,"height":214},
-		{"id":"89ac67858be5d1e1","type":"text","text":"","x":-1439,"y":-1512,"width":250,"height":60},
 		{"id":"6d47aa1745d46fa6","type":"text","text":"API","x":-1255,"y":-920,"width":250,"height":50,"color":"3"},
-		{"id":"6630f6541e668b51","type":"text","text":"Sử dụng beekeeper studio để quản lý dữ liệu nhưng đa phần có thể dùng admin console bên frontend để quản lý bài học, bài thi test, ra đề. ngoài ra admin console còn có phân tích dữ liệu. Beekeeper chỉ được sử dụng để truy vấn dữ liệu phức tạp trong trường hợp cần thiết. Ngoài ra còn giám sát bất thường trong dữ liệu","x":-1610,"y":-1860,"width":620,"height":180},
 		{"id":"e8cc4c393e1170c5","type":"text","text":"**JWT (JSON Web Token)** là một **chuẩn xác thực** dùng để **định danh người dùng** giữa client (frontend) và server (backend) **mà không cần lưu session trên server**.","x":-1260,"y":-1145,"width":375,"height":146},
 		{"id":"e43b6d2b66741c60","type":"text","text":"## Frontend\n- Tech stack : Svelte + Tailwindcss\n- Static mardown ","x":-1700,"y":-660,"width":220,"height":170,"color":"6"},
 		{"id":"fc8179476384dd56","type":"file","file":"png/Pasted image 20260115150022.png","x":-2240,"y":-1406,"width":180,"height":101},
@@ -32,9 +29,11 @@
 		{"id":"ac352f562a6ad2db","type":"text","text":"AI","x":-1516,"y":222,"width":250,"height":60},
 		{"id":"18315419bac2245c","type":"text","text":"AI\n- Lịch sử cuộc trò truyện\n- Lấy nội dung user đã highlight ","x":-1756,"y":555,"width":416,"height":145},
 		{"id":"1e79ad6a005d0a20","type":"file","file":"Pasted image 20260115153206.png","x":-1284,"y":540,"width":400,"height":263},
-		{"id":"41630379fa99eb43","type":"text","text":"**Flask** là **web framework Python**.\n\n**Điểm đặc biệt nhất**:  \n**Nhẹ, tối giản, không ép cấu trúc – muốn xây gì thì tự ráp nấy.**\n\n- Micro-framework (core rất nhỏ)\n    \n- Không có sẵn ORM, auth, admin (tự chọn)\n    \n- Dễ hiểu, dễ học\n    \n- Linh hoạt, hợp API backend\n=> phù hợp để tích hợp với các thư viện liên quan đến AI, hoặc kho thư viện rộng lớn python. Giúp tối ưu thời gian code, có nhiều công cụ để lựa chọn và xây dựng chức năng","x":-2545,"y":-1860,"width":610,"height":364},
-		{"id":"8f2503741abde9e5","type":"text","text":"AI\n- Sử dụng gemini-flash, qwen3.4b chạy local\n- có promt và base context đã được cho trước trong database\n- \n=> xử lý câu hỏi chính xác và nhanh chóng ","x":-1900,"y":-1632,"width":290,"height":252},
-		{"id":"56b773df623a24df","type":"text","text":"DATABASE","x":-1565,"y":-1350,"width":190,"height":50}
+		{"id":"56b773df623a24df","type":"text","text":"DATABASE","x":-1565,"y":-1350,"width":190,"height":50},
+		{"id":"41630379fa99eb43","type":"text","text":"**Flask** là **web framework Python**.\n\n**Điểm đặc biệt nhất**:  \n**Nhẹ, tối giản, không ép cấu trúc – muốn xây gì thì tự ráp nấy.**\n\n- Micro-framework (core rất nhỏ)\n    \n- Không có sẵn ORM, auth, admin (tự chọn)\n    \n- Dễ hiểu, dễ học\n    \n- Linh hoạt, hợp API backend\n=> phù hợp để tích hợp với các thư viện liên quan đến AI, hoặc kho thư viện rộng lớn python. Giúp tối ưu thời gian code, có nhiều công cụ để lựa chọn và xây dựng chức năng","x":-2545,"y":-1881,"width":610,"height":364},
+		{"id":"6630f6541e668b51","type":"text","text":"Sử dụng beekeeper studio để quản lý dữ liệu nhưng đa phần có thể dùng admin console bên frontend để quản lý bài học, bài thi test, ra đề. ngoài ra admin console còn có phân tích dữ liệu. Beekeeper chỉ được sử dụng để truy vấn dữ liệu phức tạp trong trường hợp cần thiết. Ngoài ra còn giám sát bất thường trong dữ liệu","x":-1610,"y":-1840,"width":620,"height":180},
+		{"id":"55bffa975918a63a","type":"file","file":"png/Beekeeper.png","x":-1457,"y":-1620,"width":395,"height":211},
+		{"id":"8f2503741abde9e5","type":"text","text":"AI\n- Sử dụng gemini-flash, qwen3.4b chạy local\n- có promt và base context đã được cho trước trong database\n- \n=> xử lý câu hỏi chính xác và nhanh chóng ","x":-1880,"y":-1632,"width":290,"height":252}
 	],
 	"edges":[
 		{"id":"0521dbfdf4da6a95","fromNode":"78f3b3e65e16e994","fromSide":"right","toNode":"6d47aa1745d46fa6","toSide":"left"},

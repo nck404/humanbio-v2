@@ -60,6 +60,33 @@
         const minutes = Math.floor(seconds / 60);
         return `${minutes}m ${seconds % 60}s`;
     }
+
+    let isSpeaking = $state(false);
+    let currentAudio = null;
+
+    function speak(text) {
+        if (!text) return;
+
+        // Stop any current speaking
+        if (currentAudio) {
+            currentAudio.pause();
+            currentAudio = null;
+        }
+
+        isSpeaking = true;
+        const url = `${API_URL}/api/chat/tts?text=${encodeURIComponent(text)}`;
+        const audio = new Audio(url);
+        currentAudio = audio;
+
+        audio.play().catch((e) => {
+            console.error("Audio playback failed:", e);
+            isSpeaking = false;
+        });
+
+        audio.onended = () => {
+            isSpeaking = false;
+        };
+    }
 </script>
 
 <div class="min-h-screen bg-fd-background flex flex-col">
@@ -316,18 +343,33 @@
                             >
                                 <!-- Textual Inquiry -->
                                 <div class="lg:col-span-7 space-y-8">
-                                    <h1
-                                        class="text-3xl font-black text-fd-foreground leading-tight tracking-tight"
-                                    >
-                                        {q.text}
-                                    </h1>
+                                    <div class="flex items-start gap-4">
+                                        <h1
+                                            class="text-3xl font-black text-fd-foreground leading-tight tracking-tight flex-1"
+                                        >
+                                            {q.text}
+                                        </h1>
+                                        <button
+                                            onclick={() => speak(q.text)}
+                                            class="mt-1 w-10 h-10 rounded-full bg-fd-primary/10 text-fd-primary flex items-center justify-center hover:bg-fd-primary hover:text-white transition-all shrink-0"
+                                            title="Nghe câu hỏi"
+                                        >
+                                            <i class="bx bx-volume-full text-xl"
+                                            ></i>
+                                        </button>
+                                    </div>
 
                                     <div class="space-y-4">
                                         {#each q.options as opt}
-                                            <button
+                                            <div
+                                                role="button"
+                                                tabindex="0"
                                                 onclick={() =>
                                                     selectAnswer(q.id, opt)}
-                                                class="w-full group relative flex items-center gap-6 p-6 rounded-[2rem] border-2 text-left transition-all duration-300
+                                                onkeydown={(e) =>
+                                                    e.key === "Enter" &&
+                                                    selectAnswer(q.id, opt)}
+                                                class="w-full group relative flex items-center gap-6 p-6 rounded-[2rem] border-2 text-left transition-all duration-300 cursor-pointer
                                                 {userAnswers[q.id] === opt
                                                     ? 'bg-fd-primary text-white border-fd-primary shadow-xl shadow-fd-primary/20 scale-[1.02]'
                                                     : 'bg-fd-secondary/30 border-transparent hover:border-fd-primary/30 hover:bg-fd-primary/5'}"
@@ -346,12 +388,24 @@
                                                     )}
                                                 </div>
                                                 <span
-                                                    class="text-[17px] font-black tracking-tight"
+                                                    class="text-[17px] font-black tracking-tight flex-1"
                                                     >{opt}</span
                                                 >
+                                                <button
+                                                    onclick={(e) => {
+                                                        e.stopPropagation();
+                                                        speak(opt);
+                                                    }}
+                                                    class="w-8 h-8 rounded-lg bg-fd-card/50 text-fd-muted flex items-center justify-center hover:text-fd-primary transition-colors relative z-10"
+                                                    title="Nghe đáp án"
+                                                >
+                                                    <i
+                                                        class="bx bx-volume-low text-lg"
+                                                    ></i>
+                                                </button>
                                                 {#if userAnswers[q.id] === opt}
                                                     <div
-                                                        class="ml-auto w-6 h-6 rounded-full bg-white flex items-center justify-center"
+                                                        class="ml-4 w-6 h-6 rounded-full bg-white flex items-center justify-center shrink-0"
                                                         in:scale
                                                     >
                                                         <i
@@ -359,7 +413,7 @@
                                                         ></i>
                                                     </div>
                                                 {/if}
-                                            </button>
+                                            </div>
                                         {/each}
                                     </div>
                                 </div>

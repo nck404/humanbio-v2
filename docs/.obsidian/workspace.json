@@ -15,9 +15,9 @@
               "state": {
                 "file": "Backend.canvas",
                 "viewState": {
-                  "x": -1436.0199521065615,
-                  "y": -474.6939993098216,
-                  "zoom": -0.20535459203574508
+                  "x": -2164.9356247185733,
+                  "y": -1417.6842317028384,
+                  "zoom": 0.3333333333333334
                 }
               },
               "icon": "lucide-layout-dashboard",
@@ -188,6 +188,7 @@
   },
   "active": "7132d3664eeb864c",
   "lastOpenFiles": [
+    "Voice.md",
     "Pasted image 20260115153206.png",
     "png/Pasted image 20260115152153.png",
     "png/Pasted image 20260115150022.png",

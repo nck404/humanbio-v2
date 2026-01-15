@@ -3,6 +3,9 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from models import db, ChatSession, ChatMessage, User
 import google.generativeai as genai
 import os
+from gtts import gTTS
+import io
+from flask import send_file
 
 chat_bp = Blueprint('chat', __name__)
 
@@ -126,4 +129,18 @@ def delete_session(session_id):
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': str(e)}), 500
-
+@chat_bp.route('/tts', methods=['GET'])
+def text_to_speech():
+    text = request.args.get('text', '')
+    if not text:
+        return jsonify({'error': 'No text provided'}), 400
+    
+    try:
+        # Use gTTS for high quality Vietnamese voice
+        tts = gTTS(text=text, lang='vi')
+        fp = io.BytesIO()
+        tts.write_to_fp(fp)
+        fp.seek(0)
+        return send_file(fp, mimetype='audio/mpeg')
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500

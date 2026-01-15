@@ -20,6 +20,9 @@
     let dragOffset = { x: 0, y: 0 };
     let resizeStart = { x: 0, y: 0, width: 0, height: 0 };
     let windowElement;
+    let isRecording = $state(false);
+    let recognition;
+    let autoPlayVoice = $state(true);
 
     const API_BASE = "http://localhost:5000/api";
 
@@ -35,8 +38,67 @@
                 y: window.innerHeight - size.height - 40,
             };
             loadSessions();
+
+            // Initialize Speech Recognition
+            const SpeechRecognition =
+                window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (SpeechRecognition) {
+                recognition = new SpeechRecognition();
+                recognition.continuous = false;
+                recognition.lang = "vi-VN";
+                recognition.interimResults = false;
+
+                recognition.onstart = () => {
+                    isRecording = true;
+                };
+
+                recognition.onresult = (event) => {
+                    const transcript = event.results[0][0].transcript;
+                    inputValue = transcript;
+                    sendMessage();
+                };
+
+                recognition.onerror = (event) => {
+                    console.error("Speech recognition error:", event.error);
+                    isRecording = false;
+                };
+
+                recognition.onend = () => {
+                    isRecording = false;
+                };
+            }
         }
     });
+
+    function toggleRecording() {
+        if (!recognition) {
+            alert("Speech recognition is not supported in this browser.");
+            return;
+        }
+        if (isRecording) {
+            recognition.stop();
+        } else {
+            recognition.start();
+        }
+    }
+
+    function speak(text) {
+        if (!text) return;
+
+        // Stop any current speaking
+        window.speechSynthesis.cancel();
+
+        // Use our new backend TTS endpoint for high-quality Vietnamese voice
+        const url = `${API_BASE}/chat/tts?text=${encodeURIComponent(text)}`;
+        const audio = new Audio(url);
+        audio.play().catch((e) => {
+            console.error("Audio playback failed:", e);
+            // Fallback to Web Speech API if backend fails
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = "vi-VN";
+            window.speechSynthesis.speak(utterance);
+        });
+    }
 
     // ============ API Functions ============
     async function loadSessions() {
@@ -133,6 +195,10 @@
 
                 // Reload sessions to update title
                 await loadSessions();
+
+                if (autoPlayVoice) {
+                    speak(aiMessage.content);
+                }
             } else {
                 messages = [
                     ...messages,
@@ -328,6 +394,22 @@
                 <div class="flex items-center gap-1">
                     <button
                         onmousedown={(e) => e.stopPropagation()}
+                        onclick={() => (autoPlayVoice = !autoPlayVoice)}
+                        class="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-fd-primary/10 {autoPlayVoice
+                            ? 'text-fd-primary'
+                            : 'text-fd-muted'} transition-all"
+                        title={autoPlayVoice
+                            ? "Auto-play: On"
+                            : "Auto-play: Off"}
+                    >
+                        <i
+                            class="bx {autoPlayVoice
+                                ? 'bx-volume-full'
+                                : 'bx-volume-mute'} text-lg"
+                        ></i>
+                    </button>
+                    <button
+                        onmousedown={(e) => e.stopPropagation()}
                         onclick={createNewChat}
                         class="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-fd-primary/10 text-fd-muted hover:text-fd-primary transition-all"
                         title="New Chat"
@@ -419,14 +501,27 @@
                                         {msg.content}
                                     </div>
                                     {#if msg.role === "model"}
-                                        <button
-                                            onclick={() =>
-                                                copyMessage(msg.content)}
-                                            class="mt-1 px-2 py-0.5 text-[9px] text-fd-muted hover:text-fd-primary opacity-0 group-hover:opacity-100 transition-opacity"
-                                            title="Copy"
+                                        <div
+                                            class="flex gap-1 mt-1 opacity-0 group-hover:opacity-100 transition-opacity"
                                         >
-                                            <i class="bx bx-copy"></i> Copy
-                                        </button>
+                                            <button
+                                                onclick={() =>
+                                                    copyMessage(msg.content)}
+                                                class="px-2 py-0.5 text-[9px] text-fd-muted hover:text-fd-primary flex items-center gap-1"
+                                                title="Copy"
+                                            >
+                                                <i class="bx bx-copy"></i> Copy
+                                            </button>
+                                            <button
+                                                onclick={() =>
+                                                    speak(msg.content)}
+                                                class="px-2 py-0.5 text-[9px] text-fd-muted hover:text-fd-primary flex items-center gap-1"
+                                                title="Nghe"
+                                            >
+                                                <i class="bx bx-volume-full"
+                                                ></i> Nghe
+                                            </button>
+                                        </div>
                                     {/if}
                                 </div>
                             </div>
@@ -472,13 +567,30 @@
                                 class="w-full bg-transparent border-none text-xs text-fd-foreground placeholder:text-fd-muted placeholder:opacity-50 focus:ring-0 p-0 font-medium disabled:opacity-50"
                                 autocomplete="off"
                             />
-                            <button
-                                onclick={sendMessage}
-                                disabled={isLoading || !inputValue.trim()}
-                                class="p-1.5 rounded-lg bg-fd-primary/10 text-fd-primary hover:bg-fd-primary hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                                <i class="bx bxs-send text-sm"></i>
-                            </button>
+                            <div class="flex items-center gap-1.5">
+                                <button
+                                    onclick={toggleRecording}
+                                    class="p-1.5 rounded-lg transition-all {isRecording
+                                        ? 'bg-red-500 text-white animate-pulse'
+                                        : 'text-fd-muted hover:bg-fd-accent hover:text-fd-primary'}"
+                                    title={isRecording
+                                        ? "Đang nghe..."
+                                        : "Nói chuyện"}
+                                >
+                                    <i
+                                        class="bx {isRecording
+                                            ? 'bx-stop'
+                                            : 'bx-microphone'} text-sm"
+                                    ></i>
+                                </button>
+                                <button
+                                    onclick={sendMessage}
+                                    disabled={isLoading || !inputValue.trim()}
+                                    class="p-1.5 rounded-lg bg-fd-primary/10 text-fd-primary hover:bg-fd-primary hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                                >
+                                    <i class="bx bxs-send text-sm"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -520,8 +632,21 @@
                     </div>
                     <div class="flex items-center gap-2">
                         <button
+                            onclick={() => (autoPlayVoice = !autoPlayVoice)}
+                            class="w-9 h-9 flex items-center justify-center rounded-full {autoPlayVoice
+                                ? 'bg-fd-primary/20 text-fd-primary'
+                                : 'bg-fd-accent text-fd-muted'}"
+                        >
+                            <i
+                                class="bx {autoPlayVoice
+                                    ? 'bx-volume-full'
+                                    : 'bx-volume-mute'} text-xl"
+                            ></i>
+                        </button>
+                        <button
                             onclick={createNewChat}
                             class="w-9 h-9 flex items-center justify-center rounded-full bg-fd-accent text-fd-primary"
+                            aria-label="Tạo cuộc hội thoại mới"
                         >
                             <i class="bx bx-plus text-xl"></i>
                         </button>
@@ -550,6 +675,23 @@
                                 >
                                     {msg.content}
                                 </div>
+                                {#if msg.role === "model"}
+                                    <div class="flex gap-2 mt-1 px-1">
+                                        <button
+                                            onclick={() => speak(msg.content)}
+                                            class="text-[10px] text-fd-muted flex items-center gap-1"
+                                        >
+                                            <i class="bx bx-volume-full"></i> Nghe
+                                        </button>
+                                        <button
+                                            onclick={() =>
+                                                copyMessage(msg.content)}
+                                            class="text-[10px] text-fd-muted flex items-center gap-1"
+                                        >
+                                            <i class="bx bx-copy"></i> Copy
+                                        </button>
+                                    </div>
+                                {/if}
                             </div>
                         </div>
                     {/each}
@@ -589,9 +731,25 @@
                             autocomplete="off"
                         />
                         <button
+                            onclick={toggleRecording}
+                            class="p-2 rounded-xl {isRecording
+                                ? 'bg-red-500 text-white animate-pulse'
+                                : 'text-fd-muted bg-fd-accent'}"
+                            aria-label={isRecording
+                                ? "Dừng ghi âm"
+                                : "Bắt đầu ghi âm"}
+                        >
+                            <i
+                                class="bx {isRecording
+                                    ? 'bx-stop'
+                                    : 'bx-microphone'} text-xl"
+                            ></i>
+                        </button>
+                        <button
                             onclick={sendMessage}
                             disabled={isLoading || !inputValue.trim()}
                             class="w-10 h-10 flex items-center justify-center rounded-xl bg-fd-primary text-white shadow-lg shadow-fd-primary/20 disabled:opacity-50"
+                            aria-label="Gửi tin nhắn"
                         >
                             <i class="bx bxs-send text-lg"></i>
                         </button>
