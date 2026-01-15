@@ -24,7 +24,8 @@
     let recognition;
     let autoPlayVoice = $state(true);
 
-    const API_BASE = "http://localhost:5000/api";
+    import { API_URL } from "$lib/constants";
+    const API_BASE = `${API_URL}/api`;
 
     function close() {
         isOpen = false;

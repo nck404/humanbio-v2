@@ -28,6 +28,18 @@
 	});
 
 	onMount(async () => {
+		// Monkey-patch fetch to bypass Localtunnel reminder page
+		const originalFetch = window.fetch;
+		window.fetch = async (...args) => {
+			let [url, config] = args;
+			if (typeof url === "string" && url.includes(API_URL)) {
+				config = { ...config };
+				config.headers = { ...config.headers };
+				config.headers["bypass-tunnel-reminder"] = "true";
+			}
+			return originalFetch(url, config);
+		};
+
 		if ($auth.isAuthenticated) {
 			try {
 				const res = await fetch(`${API_URL}/api/me`, {
