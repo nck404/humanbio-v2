@@ -58,10 +58,11 @@
 
                 // Initialize settings from user data
                 if (data.user.settings) {
-                    settings.set({
+                    settings.update((s) => ({
+                        ...s,
                         ...data.user.settings,
                         theme: "light", // Force light mode
-                    });
+                    }));
                 }
 
                 goto("/");

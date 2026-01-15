@@ -65,7 +65,7 @@ def login():
 @auth_bp.route('/me', methods=['GET'])
 @jwt_required()
 def get_me():
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
     user = User.query.get(user_id)
     if not user:
         return jsonify({"msg": "User not found"}), 404
@@ -80,7 +80,7 @@ def get_me():
 @auth_bp.route('/me/settings', methods=['PUT'])
 @jwt_required()
 def update_settings():
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
     user = User.query.get(user_id)
     if not user:
         return jsonify({"msg": "User not found"}), 404

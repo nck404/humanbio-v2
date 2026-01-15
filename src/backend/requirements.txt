@@ -7,3 +7,4 @@ requests
 passlib
 bcrypt
 flask-migrate
+google-generativeai

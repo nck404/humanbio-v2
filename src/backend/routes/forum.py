@@ -35,7 +35,7 @@ def get_posts():
 def create_post():
     try:
         data = request.get_json()
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         
         if not data.get('title') or not data.get('content'):
             return jsonify({"msg": "Title and content are required"}), 400
@@ -61,7 +61,7 @@ def get_post_details(post_id):
         current_user_id = None
         try:
             verify_jwt_in_request(optional=True)
-            current_user_id = get_jwt_identity()
+            current_user_id = int(get_jwt_identity())
         except:
             pass
         
@@ -71,7 +71,7 @@ def get_post_details(post_id):
             user_reaction = None
             if current_user_id:
                 # Inefficient for large datasets but ok for MVP
-                reaction = next((r for r in comment.reactions if r.user_id == int(current_user_id)), None)
+                reaction = next((r for r in comment.reactions if r.user_id == current_user_id), None)
                 if reaction: user_reaction = reaction.type
                 
             return {
@@ -93,7 +93,7 @@ def get_post_details(post_id):
         post_reaction_count = len(post.reactions)
         post_user_reaction = None
         if current_user_id:
-             reaction = next((r for r in post.reactions if r.user_id == int(current_user_id)), None)
+             reaction = next((r for r in post.reactions if r.user_id == current_user_id), None)
              if reaction: post_user_reaction = reaction.type
         
         return jsonify({
@@ -118,7 +118,7 @@ def get_post_details(post_id):
 def add_comment(post_id):
     try:
         data = request.get_json()
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         
         if not data.get('content'):
             return jsonify({"msg": "Content is required"}), 400
@@ -146,7 +146,7 @@ def react_to_post(post_id):
     try:
         data = request.get_json()
         reaction_type = data.get('type', 'like')
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         
         existing = ForumPostReaction.query.filter_by(user_id=current_user_id, post_id=post_id).first()
         
@@ -175,7 +175,7 @@ def react_to_comment(comment_id):
     try:
         data = request.get_json()
         reaction_type = data.get('type', 'like')
-        current_user_id = get_jwt_identity()
+        current_user_id = int(get_jwt_identity())
         
         existing = ForumCommentReaction.query.filter_by(user_id=current_user_id, comment_id=comment_id).first()
         

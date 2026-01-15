@@ -85,3 +85,17 @@ class ForumCommentReaction(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     comment_id = db.Column(db.Integer, db.ForeignKey('forum_comment.id'), nullable=False)
     type = db.Column(db.String(20), default="like")
+
+class ChatSession(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    title = db.Column(db.String(100), default="New Chat")
+    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+    messages = db.relationship('ChatMessage', backref='session', lazy=True, cascade="all, delete-orphan")
+
+class ChatMessage(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    session_id = db.Column(db.Integer, db.ForeignKey('chat_session.id'), nullable=False)
+    role = db.Column(db.String(10), nullable=False) # 'user' or 'model'
+    content = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())

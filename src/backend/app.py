@@ -8,6 +8,7 @@ from routes.admin import admin_bp
 from routes.comments import comments_bp
 from routes.tests import tests_bp
 from routes.forum import forum_bp
+from routes.chat import chat_bp
 
 load_dotenv()
 
@@ -30,6 +31,7 @@ def create_app():
     app.register_blueprint(comments_bp, url_prefix='/api/comments')
     app.register_blueprint(tests_bp, url_prefix='/api/tests')
     app.register_blueprint(forum_bp, url_prefix='/api/forum')
+    app.register_blueprint(chat_bp, url_prefix='/api/chat')
 
     with app.app_context():
         db.create_all()

@@ -26,7 +26,7 @@ def get_comments(slug):
 @jwt_required()
 def post_comment():
     data = request.get_json()
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
     content = data.get('content')
     slug = data.get('slug')
     parent_id = data.get('parent_id') # New field for replies
