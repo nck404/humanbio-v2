@@ -4,21 +4,24 @@
     "type": "split",
     "children": [
       {
-        "id": "c244f707fa2fd8ff",
+        "id": "c37803317a3a79a7",
         "type": "tabs",
         "children": [
           {
-            "id": "6d022731cb1abc6f",
+            "id": "7132d3664eeb864c",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "canvas",
               "state": {
-                "file": "desc.md",
-                "mode": "source",
-                "source": false
+                "file": "Backend.canvas",
+                "viewState": {
+                  "x": -1436.0199521065615,
+                  "y": -474.6939993098216,
+                  "zoom": -0.20535459203574508
+                }
               },
-              "icon": "lucide-file",
-              "title": "desc"
+              "icon": "lucide-layout-dashboard",
+              "title": "Backend"
             }
           }
         ]
@@ -94,7 +97,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "desc.md",
+                "file": "Backend.canvas",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +107,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for desc"
+              "title": "Backlinks for Backend"
             }
           },
           {
@@ -183,11 +186,26 @@
       "bases:Create new base": false
     }
   },
-  "active": "6d022731cb1abc6f",
+  "active": "7132d3664eeb864c",
   "lastOpenFiles": [
-    "2026-01-11.md",
-    "Untitled.canvas",
+    "Pasted image 20260115153206.png",
+    "png/Pasted image 20260115152153.png",
+    "png/Pasted image 20260115150022.png",
+    "png/Pasted image 20260115151159.png",
+    "Backend.canvas",
+    "Untitled.md",
+    "png",
+    "png/Beekeeper.png",
+    "JWT_FIX.md",
+    "png/svelte.png",
+    "png/Artboard_1-removebg-preview.png",
+    "UPDATE_2026_01_15.md",
+    "API_TREE_DOCUMENTATION.md",
+    "Backend/backend-setup.md",
+    "Backend",
+    "AI_CHAT_SETUP.md",
+    "2026-01-15.md",
     "desc.md",
-    "backend-setup.md"
+    "2026-01-11.md"
   ]
 }
