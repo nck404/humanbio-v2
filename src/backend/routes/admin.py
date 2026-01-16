@@ -34,16 +34,20 @@ def create_test():
 @admin_bp.route('/tests', methods=['GET'])
 @admin_required
 def list_tests():
-    print("DEBUG: list_tests hit")
-    tests = MockTest.query.all()
-    print(f"DEBUG: Found {len(tests)} tests")
+    # Optimize query to avoid loading all questions (and potentially large images) just to count them
+    # Use grouped query
+    results = db.session.query(MockTest, db.func.count(Question.id).label('count')) \
+        .outerjoin(Question) \
+        .group_by(MockTest.id) \
+        .all()
+        
     return jsonify([{
         "id": t.id, 
         "title": t.title, 
         "description": t.description,
         "category": t.category,
-        "question_count": len(t.questions)
-    } for t in tests])
+        "question_count": count
+    } for t, count in results])
 
 @admin_bp.route('/tests/<int:test_id>', methods=['GET'])
 @admin_required

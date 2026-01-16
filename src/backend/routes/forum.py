@@ -122,13 +122,18 @@ def get_post_details(post_id):
             pass
         
         # Recursive function to serialize comments
+        if current_user_id:
+             # Pre-fetch user reactions for this post's comments to avoid N+1 queries
+             user_reactions = {
+                 r.comment_id: r.type 
+                 for r in ForumCommentReaction.query.filter_by(user_id=current_user_id)
+                 .join(ForumComment).filter(ForumComment.post_id == post_id).all()
+             }
+
+        # Recursive function to serialize comments
         def serialize_comment(comment):
             reaction_count = len(comment.reactions)
-            user_reaction = None
-            if current_user_id:
-                # Inefficient for large datasets but ok for MVP
-                reaction = next((r for r in comment.reactions if r.user_id == current_user_id), None)
-                if reaction: user_reaction = reaction.type
+            user_reaction = user_reactions.get(comment.id) if current_user_id else None
                 
             return {
                 'id': comment.id,

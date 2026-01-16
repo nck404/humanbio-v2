@@ -114,6 +114,42 @@
         }
     }
 
+    async function deletePost() {
+        if (!confirm("Bạn có chắc chắn muốn xóa bài viết này không?")) return;
+        try {
+            const res = await fetch(`${API_URL}/api/forum/posts/${postId}`, {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${$auth.token}`,
+                },
+            });
+            if (res.ok) {
+                goto("/forum");
+            } else {
+                alert("Không thể xóa bài viết");
+            }
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    async function deleteComment(id) {
+        if (!confirm("Bạn có chắc chắn muốn xóa bình luận này không?")) return;
+        try {
+            const res = await fetch(`${API_URL}/api/forum/comments/${id}`, {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${$auth.token}`,
+                },
+            });
+            if (res.ok) {
+                await fetchPost(); // Refresh
+            }
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
     function toggleExpand(id) {
         if (expandedThreads.has(id)) {
             expandedThreads.delete(id);
