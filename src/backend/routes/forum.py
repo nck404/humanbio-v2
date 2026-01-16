@@ -1,9 +1,43 @@
 from flask import Blueprint, request, jsonify
 from extensions import db
-from models import ForumPost, ForumComment, User, ForumPostReaction, ForumCommentReaction
+from models import ForumPost, ForumComment, User, ForumPostReaction, ForumCommentReaction, DirectMessage, Conversation, ConversationParticipant
 from flask_jwt_extended import jwt_required, get_jwt_identity, verify_jwt_in_request
 
 forum_bp = Blueprint('forum', __name__)
+
+def send_violation_notice(admin_id, user_id, content_type, content_preview):
+    """Sends a direct message to the user about the violation."""
+    if admin_id == user_id: return # Don't message self if self-deleting (unlikely for admin action on others)
+    
+    try:
+        # 1. Find or create conversation
+        # Check for existing conversation between these two
+        conv = Conversation.query.join(Conversation.participants).filter(
+            ConversationParticipant.user_id.in_([admin_id, user_id])
+        ).group_by(Conversation.id).having(db.func.count(ConversationParticipant.user_id) == 2).first()
+        
+        if not conv:
+            conv = Conversation()
+            db.session.add(conv)
+            db.session.flush() # Get ID
+            
+            p1 = ConversationParticipant(conversation_id=conv.id, user_id=admin_id)
+            p2 = ConversationParticipant(conversation_id=conv.id, user_id=user_id)
+            db.session.add_all([p1, p2])
+            
+        # 2. Create Message
+        msg_content = f"**Hệ thống:** Nội dung của bạn ({content_type}) đã bị xóa do vi phạm quy tắc cộng đồng.\n\n> {content_preview[:50]}...\n\nVui lòng xem lại [quy tắc](/rules)."
+        
+        msg = DirectMessage(
+            conversation_id=conv.id,
+            sender_id=admin_id,
+            content=msg_content
+        )
+        db.session.add(msg)
+        # We rely on the caller to commit
+    except Exception as e:
+        print(f"Failed to send violation notice: {e}")
+
 
 @forum_bp.route('/posts', methods=['GET'])
 def get_posts():
@@ -53,6 +87,28 @@ def create_post():
         return jsonify({"msg": "Post created successfully", "id": new_post.id}), 201
     except Exception as e:
         return jsonify({"msg": "Failed to create post", "error": str(e)}), 500
+
+@forum_bp.route('/posts/<int:post_id>', methods=['DELETE'])
+@jwt_required()
+def delete_post(post_id):
+    try:
+        current_user_id = int(get_jwt_identity())
+        user = User.query.get(current_user_id)
+        post = ForumPost.query.get_or_404(post_id)
+
+        if not user.is_admin and post.user_id != current_user_id:
+            return jsonify({"msg": "Unauthorized"}), 403
+
+        is_admin_action = user.is_admin and post.user_id != current_user_id
+        
+        if is_admin_action:
+            send_violation_notice(current_user_id, post.user_id, "Bài viết", post.title)
+
+        db.session.delete(post)
+        db.session.commit()
+        return jsonify({"msg": "Post deleted"}), 200
+    except Exception as e:
+        return jsonify({"msg": "Failed to delete post", "error": str(e)}), 500
 
 @forum_bp.route('/posts/<int:post_id>', methods=['GET'])
 def get_post_details(post_id):
@@ -139,6 +195,28 @@ def add_comment(post_id):
         return jsonify({"msg": "Comment added successfully", "id": new_comment.id}), 201
     except Exception as e:
         return jsonify({"msg": "Failed to add comment", "error": str(e)}), 500
+
+@forum_bp.route('/comments/<int:comment_id>', methods=['DELETE'])
+@jwt_required()
+def delete_comment(comment_id):
+    try:
+        current_user_id = int(get_jwt_identity())
+        user = User.query.get(current_user_id)
+        comment = ForumComment.query.get_or_404(comment_id)
+
+        if not user.is_admin and comment.user_id != current_user_id:
+            return jsonify({"msg": "Unauthorized"}), 403
+
+        is_admin_action = user.is_admin and comment.user_id != current_user_id
+        
+        if is_admin_action:
+            send_violation_notice(current_user_id, comment.user_id, "Bình luận", comment.content)
+
+        db.session.delete(comment)
+        db.session.commit()
+        return jsonify({"msg": "Comment deleted"}), 200
+    except Exception as e:
+        return jsonify({"msg": "Failed to delete comment", "error": str(e)}), 500
 
 @forum_bp.route('/posts/<int:post_id>/react', methods=['POST'])
 @jwt_required()

@@ -95,6 +95,42 @@
         return false;
     }
 
+    // Must be recursive to find and remove
+    function removeCommentLocally(list, id) {
+        const index = list.findIndex((c) => c.id === id);
+        if (index !== -1) {
+            list.splice(index, 1);
+            return true;
+        }
+        for (let c of list) {
+            if (c.replies && removeCommentLocally(c.replies, id)) {
+                // Force reactivity if needed for nested arrays in Svelte 5
+                c.replies = [...c.replies];
+                return true;
+            }
+        }
+        return false;
+    }
+
+    async function deleteComment(id) {
+        if (!confirm("Are you sure you want to delete this comment?")) return;
+        try {
+            const res = await fetch(`${API_URL}/api/comments/${id}`, {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${$auth.token}`,
+                },
+            });
+            if (res.ok) {
+                if (removeCommentLocally(comments, id)) {
+                    comments = [...comments]; // Trigger update
+                }
+            }
+        } catch (e) {
+            console.error("Failed to delete", e);
+        }
+    }
+
     function formatDate(dateStr) {
         const date = new Date(dateStr);
         const now = new Date();
@@ -326,6 +362,16 @@
                                 ></i>
                             </div>
                             {replyingTo === comment.id ? "Abort" : "Reply"}
+                        </button>
+                    {/if}
+
+                    {#if $auth.isAuthenticated && ($auth.user?.is_admin || $auth.user?.id === comment.user_id)}
+                        <button
+                            onclick={() => deleteComment(comment.id)}
+                            class="text-[10px] font-black uppercase tracking-[0.15em] text-red-500/50 hover:text-red-500 transition-all flex items-center gap-2"
+                        >
+                            <i class="bx bx-trash"></i>
+                            Delete
                         </button>
                     {/if}
                 </div>

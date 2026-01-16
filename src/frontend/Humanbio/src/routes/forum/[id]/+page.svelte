@@ -256,6 +256,16 @@
                         <i class="bx bx-message-rounded-dots text-xl"></i>
                         {post.comments.length} thảo luận
                     </span>
+
+                    {#if $auth.isAuthenticated && ($auth.user?.is_admin || $auth.user?.id === post.author.id)}
+                        <button
+                            onclick={deletePost}
+                            class="ml-auto flex items-center gap-2 px-4 py-2 rounded-xl bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-all font-bold text-sm"
+                        >
+                            <i class="bx bx-trash"></i>
+                            <span class="hidden md:inline">Xóa bài</span>
+                        </button>
+                    {/if}
                 </div>
             </div>
 
@@ -472,6 +482,15 @@
                                 ></i>
                             </div>
                             {replyingTo === comment.id ? "Hủy" : "Trả lời"}
+                        </button>
+                    {/if}
+
+                    {#if $auth.isAuthenticated && ($auth.user?.is_admin || $auth.user?.id === comment.author.id)}
+                        <button
+                            onclick={() => deleteComment(comment.id)}
+                            class="text-[10px] font-black uppercase tracking-[0.15em] text-red-500/50 hover:text-red-500 transition-all flex items-center gap-2"
+                        >
+                            <i class="bx bx-trash"></i>
                         </button>
                     {/if}
                 </div>

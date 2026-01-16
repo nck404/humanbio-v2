@@ -147,6 +147,21 @@
                         ></div>
                     {/if}
                 </a>
+                <a
+                    href="/rules"
+                    class="relative text-[13px] transition-all px-4 py-1.5 rounded-lg group {$page.url.pathname.startsWith(
+                        '/rules',
+                    )
+                        ? 'text-fd-primary bg-fd-primary/8 font-bold'
+                        : 'text-fd-muted hover:text-fd-foreground hover:bg-fd-accent font-bold'}"
+                >
+                    Quy tắc
+                    {#if $page.url.pathname.startsWith("/rules")}
+                        <div
+                            class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-fd-primary rounded-full shadow-[0_0_8px_var(--primary-glow)]"
+                        ></div>
+                    {/if}
+                </a>
             </div>
         </div>
 
