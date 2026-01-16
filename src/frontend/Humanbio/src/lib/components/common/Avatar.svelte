@@ -1,8 +1,18 @@
 <script>
-    let { seed = "default", size = 40, class: className = "" } = $props();
+    import { API_URL } from "$lib/constants";
+    let {
+        seed = "default",
+        url = null,
+        size = 40,
+        class: className = "",
+    } = $props();
 
     let avatarUrl = $derived(
-        `https://api.dicebear.com/7.x/avataaars/svg?seed=${seed}&backgroundColor=b6e3f4,c0aede,d1d4f9`,
+        url
+            ? url.startsWith("http")
+                ? url
+                : `${API_URL}${url}`
+            : `https://api.dicebear.com/7.x/avataaars/svg?seed=${seed}&backgroundColor=b6e3f4,c0aede,d1d4f9`,
     );
 </script>
 

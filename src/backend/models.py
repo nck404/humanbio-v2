@@ -8,8 +8,11 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
     avatar_seed = db.Column(db.String(100)) # For DiceBear avatars
+    avatar_url = db.Column(db.String(255)) # For uploaded avatars
     is_admin = db.Column(db.Boolean, default=False)
     settings = db.Column(db.JSON, default=lambda: {"primaryColor": "#6366f1", "fontSize": 16, "fontFamily": "sans"}) # Default settings
+    bio = db.Column(db.Text)
+    social_links = db.Column(db.JSON, default=dict)
     comments = db.relationship('Comment', backref='user', lazy=True)
 
     def set_password(self, password):
@@ -99,3 +102,26 @@ class ChatMessage(db.Model):
     role = db.Column(db.String(10), nullable=False) # 'user' or 'model'
     content = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+
+# User-to-User Messaging
+class Conversation(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+    updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
+    participants = db.relationship('ConversationParticipant', backref='conversation', lazy=True, cascade="all, delete-orphan")
+    messages = db.relationship('DirectMessage', backref='conversation', lazy=True, cascade="all, delete-orphan")
+
+class ConversationParticipant(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    conversation_id = db.Column(db.Integer, db.ForeignKey('conversation.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user = db.relationship('User', backref='conversations')
+
+class DirectMessage(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    conversation_id = db.Column(db.Integer, db.ForeignKey('conversation.id'), nullable=False)
+    sender_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    is_read = db.Column(db.Boolean, default=False)
+    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+    sender = db.relationship('User', backref='sent_messages')

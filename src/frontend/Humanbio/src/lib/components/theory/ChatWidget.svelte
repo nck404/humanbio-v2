@@ -1,783 +1,445 @@
 <script>
     import { fly, fade } from "svelte/transition";
-    import { tick, onMount } from "svelte";
+    import { tick, onMount, onDestroy } from "svelte";
+    import { renderMarkdown } from "$lib/utils/markdown";
+    import { auth } from "$lib/stores/auth";
+    import Avatar from "$lib/components/common/Avatar.svelte";
+    import { API_URL } from "$lib/constants";
 
-    let { isOpen = $bindable(false), theme = "dark" } = $props();
+    let { isOpen = $bindable(false) } = $props();
 
     // Chat State
-    let sessions = $state([]);
-    let currentSessionId = $state(null);
+    let conversations = $state([]);
+    let activeConv = $state(null);
     let messages = $state([]);
     let inputValue = $state("");
-    let chatContainer;
+    let chatContainer = $state();
     let isLoading = $state(false);
+    let searchUserId = $state("");
+    let eventSource;
 
-    // Draggable & Resizable State
+    const API_BASE = `${API_URL}/api/messages`;
+
+    // Draggable State
     let position = $state({ x: 0, y: 0 });
     let size = $state({ width: 420, height: 600 });
     let isDragging = $state(false);
-    let isResizing = $state(false);
     let dragOffset = { x: 0, y: 0 };
-    let resizeStart = { x: 0, y: 0, width: 0, height: 0 };
-    let windowElement;
-    let isRecording = $state(false);
-    let recognition;
-    let autoPlayVoice = $state(true);
-
-    import { API_URL } from "$lib/constants";
-    const API_BASE = `${API_URL}/api`;
-
-    function close() {
-        isOpen = false;
-    }
 
     onMount(() => {
         if (typeof window !== "undefined") {
-            // Default position: Bottom Right
             position = {
                 x: window.innerWidth - size.width - 40,
                 y: window.innerHeight - size.height - 40,
             };
-            loadSessions();
-
-            // Initialize Speech Recognition
-            const SpeechRecognition =
-                window.SpeechRecognition || window.webkitSpeechRecognition;
-            if (SpeechRecognition) {
-                recognition = new SpeechRecognition();
-                recognition.continuous = false;
-                recognition.lang = "vi-VN";
-                recognition.interimResults = false;
-
-                recognition.onstart = () => {
-                    isRecording = true;
-                };
-
-                recognition.onresult = (event) => {
-                    const transcript = event.results[0][0].transcript;
-                    inputValue = transcript;
-                    sendMessage();
-                };
-
-                recognition.onerror = (event) => {
-                    console.error("Speech recognition error:", event.error);
-                    isRecording = false;
-                };
-
-                recognition.onend = () => {
-                    isRecording = false;
-                };
-            }
+            loadConversations();
+            setupSSE();
         }
     });
 
-    function toggleRecording() {
-        if (!recognition) {
-            alert("Speech recognition is not supported in this browser.");
-            return;
-        }
-        if (isRecording) {
-            recognition.stop();
-        } else {
-            recognition.start();
+    onDestroy(() => {
+        if (eventSource) eventSource.close();
+    });
+
+    function setupSSE() {
+        if (!eventSource && $auth.token) {
+            eventSource = new EventSource(
+                `${API_BASE}/stream?token=${$auth.token}`,
+            );
+            eventSource.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                handleSSENotification(data);
+            };
+            eventSource.onerror = (err) => {
+                console.error("SSE connection lost", err);
+                eventSource.close();
+                eventSource = null;
+                // Retry after 5s
+                setTimeout(setupSSE, 5000);
+            };
         }
     }
 
-    function speak(text) {
-        if (!text) return;
+    function handleSSENotification(data) {
+        if (data.type === "new_message") {
+            const { conversation_id, message } = data;
 
-        // Stop any current speaking
-        window.speechSynthesis.cancel();
+            // If it's the current conversation, add to messages
+            if (activeConv && activeConv.id === conversation_id) {
+                messages = [...messages, message];
+                scrollToBottom();
+            }
 
-        // Use our new backend TTS endpoint for high-quality Vietnamese voice
-        const url = `${API_BASE}/chat/tts?text=${encodeURIComponent(text)}`;
-        const audio = new Audio(url);
-        audio.play().catch((e) => {
-            console.error("Audio playback failed:", e);
-            // Fallback to Web Speech API if backend fails
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = "vi-VN";
-            window.speechSynthesis.speak(utterance);
-        });
+            // Refresh conversation list to update "last message"
+            loadConversations();
+        }
     }
 
-    // ============ API Functions ============
-    async function loadSessions() {
+    async function loadConversations() {
         try {
-            const token = localStorage.getItem("token");
-            const response = await fetch(`${API_BASE}/chat/sessions`, {
-                headers: { Authorization: `Bearer ${token}` },
+            const response = await fetch(`${API_BASE}/conversations`, {
+                headers: { Authorization: `Bearer ${$auth.token}` },
             });
             if (response.ok) {
-                sessions = await response.json();
-                if (sessions.length > 0 && !currentSessionId) {
-                    currentSessionId = sessions[0].id;
-                    await loadMessages(currentSessionId);
-                }
+                conversations = await response.json();
             }
-        } catch (error) {
-            console.error("Failed to load sessions:", error);
+        } catch (err) {
+            console.error("Failed to load conversations", err);
         }
     }
 
-    async function loadMessages(sessionId) {
+    async function selectConversation(conv) {
+        activeConv = conv;
+        messages = [];
+        isLoading = true;
         try {
-            const token = localStorage.getItem("token");
             const response = await fetch(
-                `${API_BASE}/chat/session/${sessionId}`,
+                `${API_BASE}/conversation/${conv.id}/messages`,
                 {
-                    headers: { Authorization: `Bearer ${token}` },
+                    headers: { Authorization: `Bearer ${$auth.token}` },
                 },
             );
             if (response.ok) {
                 messages = await response.json();
-                await tick();
                 scrollToBottom();
             }
-        } catch (error) {
-            console.error("Failed to load messages:", error);
-        }
-    }
-
-    async function createNewChat() {
-        try {
-            const token = localStorage.getItem("token");
-            const response = await fetch(`${API_BASE}/chat/session`, {
-                method: "POST",
-                headers: { Authorization: `Bearer ${token}` },
-            });
-            if (response.ok) {
-                const newSession = await response.json();
-                sessions = [newSession, ...sessions];
-                currentSessionId = newSession.id;
-                messages = [];
-            }
-        } catch (error) {
-            console.error("Failed to create new chat:", error);
-        }
-    }
-
-    async function sendMessage() {
-        if (!inputValue.trim() || isLoading) return;
-
-        // Create new session if none exists
-        if (!currentSessionId) {
-            await createNewChat();
-        }
-
-        const userMessage = inputValue;
-        inputValue = "";
-        isLoading = true;
-
-        // Optimistically add user message
-        messages = [...messages, { role: "user", content: userMessage }];
-        await tick();
-        scrollToBottom();
-
-        try {
-            const token = localStorage.getItem("token");
-            const response = await fetch(`${API_BASE}/chat/message`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                },
-                body: JSON.stringify({
-                    session_id: currentSessionId,
-                    content: userMessage,
-                }),
-            });
-
-            if (response.ok) {
-                const aiMessage = await response.json();
-                messages = [...messages, aiMessage];
-                await tick();
-                scrollToBottom();
-
-                // Reload sessions to update title
-                await loadSessions();
-
-                if (autoPlayVoice) {
-                    speak(aiMessage.content);
-                }
-            } else {
-                messages = [
-                    ...messages,
-                    {
-                        role: "model",
-                        content:
-                            "Sorry, I encountered an error. Please try again.",
-                    },
-                ];
-            }
-        } catch (error) {
-            console.error("Failed to send message:", error);
-            messages = [
-                ...messages,
-                {
-                    role: "model",
-                    content: "Network error. Please check your connection.",
-                },
-            ];
+        } catch (err) {
+            console.error("Failed to load messages", err);
         } finally {
             isLoading = false;
         }
     }
 
-    // ============ UI Functions ============
-    function scrollToBottom() {
-        if (chatContainer) {
-            chatContainer.scrollTop = chatContainer.scrollHeight;
+    async function createByUserId() {
+        if (!searchUserId) return;
+        try {
+            const response = await fetch(`${API_BASE}/conversation`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${$auth.token}`,
+                },
+                body: JSON.stringify({ user_id: searchUserId }),
+            });
+            const data = await response.json();
+            if (response.ok) {
+                await loadConversations();
+                const newConv = conversations.find((c) => c.id === data.id);
+                if (newConv) selectConversation(newConv);
+                searchUserId = "";
+            } else {
+                alert(data.error || "User not found");
+            }
+        } catch (err) {
+            console.error("Failed to create conversation", err);
         }
     }
 
-    function handleKeydown(e) {
-        if (e.key === "Enter" && !e.shiftKey) {
-            e.preventDefault();
-            sendMessage();
-        }
-    }
+    async function sendMessage() {
+        if (!inputValue.trim() || !activeConv) return;
+        const currentInput = inputValue;
+        inputValue = "";
 
-    function copyMessage(content) {
-        navigator.clipboard.writeText(content);
-        // Could add a toast notification here
-    }
-
-    async function switchSession(sessionId) {
-        currentSessionId = sessionId;
-        await loadMessages(sessionId);
-    }
-
-    async function deleteSession(sessionId) {
-        if (!confirm("Bạn có chắc muốn xóa cuộc trò chuyện này?")) return;
+        // Optimistic UI
+        const tempMsg = {
+            id: Date.now(),
+            sender_id: $auth.user.id,
+            content: currentInput,
+            created_at: new Date().toISOString(),
+        };
+        messages = [...messages, tempMsg];
+        scrollToBottom();
 
         try {
-            const token = localStorage.getItem("token");
-            const response = await fetch(
-                `${API_BASE}/chat/session/${sessionId}`,
-                {
-                    method: "DELETE",
-                    headers: { Authorization: `Bearer ${token}` },
+            const response = await fetch(`${API_BASE}/send`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${$auth.token}`,
                 },
-            );
-
+                body: JSON.stringify({
+                    conversation_id: activeConv.id,
+                    content: currentInput,
+                }),
+            });
             if (response.ok) {
-                // Remove from sessions list
-                sessions = sessions.filter((s) => s.id !== sessionId);
-
-                // If deleted current session, switch to first available or clear
-                if (currentSessionId === sessionId) {
-                    if (sessions.length > 0) {
-                        currentSessionId = sessions[0].id;
-                        await loadMessages(currentSessionId);
-                    } else {
-                        currentSessionId = null;
-                        messages = [];
-                    }
-                }
+                const savedMsg = await response.json();
+                // Replace temp message with actual saved message
+                messages = messages.map((m) =>
+                    m.id === tempMsg.id ? savedMsg : m,
+                );
+                loadConversations();
             }
-        } catch (error) {
-            console.error("Failed to delete session:", error);
+        } catch (err) {
+            console.error("Failed to send message", err);
         }
     }
 
-    // ============ Drag & Resize ============
-    function startDrag(e) {
-        if (!windowElement || isResizing) return;
-        isDragging = true;
-        const rect = windowElement.getBoundingClientRect();
-        dragOffset = {
-            x: e.clientX - rect.left,
-            y: e.clientY - rect.top,
-        };
+    async function scrollToBottom() {
+        await tick();
+        if (chatContainer) {
+            chatContainer.scrollTo({
+                top: chatContainer.scrollHeight,
+                behavior: "smooth",
+            });
+        }
+    }
 
-        window.addEventListener("mousemove", handleDrag);
+    // Draggable Logic
+    function startDrag(e) {
+        isDragging = true;
+        dragOffset = {
+            x: e.clientX - position.x,
+            y: e.clientY - position.y,
+        };
+        window.addEventListener("mousemove", handleMouseMove);
         window.addEventListener("mouseup", stopDrag);
     }
-
-    function handleDrag(e) {
-        if (!isDragging) return;
-        position = {
-            x: Math.max(
-                0,
-                Math.min(
-                    e.clientX - dragOffset.x,
-                    window.innerWidth - size.width,
-                ),
-            ),
-            y: Math.max(
-                0,
-                Math.min(
-                    e.clientY - dragOffset.y,
-                    window.innerHeight - size.height,
-                ),
-            ),
-        };
+    function handleMouseMove(e) {
+        if (isDragging) {
+            position = {
+                x: e.clientX - dragOffset.x,
+                y: e.clientY - dragOffset.y,
+            };
+        }
     }
-
     function stopDrag() {
         isDragging = false;
-        window.removeEventListener("mousemove", handleDrag);
+        window.removeEventListener("mousemove", handleMouseMove);
         window.removeEventListener("mouseup", stopDrag);
-    }
-
-    function startResize(e) {
-        e.stopPropagation();
-        isResizing = true;
-        resizeStart = {
-            x: e.clientX,
-            y: e.clientY,
-            width: size.width,
-            height: size.height,
-        };
-
-        window.addEventListener("mousemove", handleResize);
-        window.addEventListener("mouseup", stopResize);
-    }
-
-    function handleResize(e) {
-        if (!isResizing) return;
-        const deltaX = e.clientX - resizeStart.x;
-        const deltaY = e.clientY - resizeStart.y;
-
-        size = {
-            width: Math.max(
-                320,
-                Math.min(
-                    resizeStart.width + deltaX,
-                    window.innerWidth - position.x,
-                ),
-            ),
-            height: Math.max(
-                400,
-                Math.min(
-                    resizeStart.height + deltaY,
-                    window.innerHeight - position.y,
-                ),
-            ),
-        };
-    }
-
-    function stopResize() {
-        isResizing = false;
-        window.removeEventListener("mousemove", handleResize);
-        window.removeEventListener("mouseup", stopResize);
     }
 </script>
 
 {#if isOpen}
-    <!-- svelte-ignore a11y_click_events_have_key_events -->
-    <div class="fixed inset-0 z-50 pointer-events-none">
-        <!-- Chat Window -->
+    <div
+        class="fixed z-[200] glass border border-fd-border/50 shadow-2xl rounded-2xl flex flex-col overflow-hidden select-none"
+        style="width: {size.width}px; height: {size.height}px; left: {position.x}px; top: {position.y}px;"
+        transition:fly={{ y: 20, duration: 300 }}
+    >
+        <!-- Header -->
         <div
-            bind:this={windowElement}
-            style="left: {position.x}px; top: {position.y}px; width: {size.width}px; height: {size.height}px;"
-            transition:fly={{ y: 20, duration: 300 }}
-            class="hidden sm:flex fixed pointer-events-auto border border-fd-border rounded-2xl shadow-2xl flex-col overflow-hidden glass ring-1 ring-fd-primary/5 bg-fd-card/95 backdrop-blur-xl"
+            class="bg-fd-background/80 p-3 flex items-center justify-between border-b border-fd-border cursor-move"
+            onmousedown={startDrag}
+            role="none"
         >
-            <!-- Header (Draggable) -->
+            <div class="flex items-center gap-3">
+                <div
+                    class="w-8 h-8 bg-fd-primary rounded-lg flex items-center justify-center shadow-lg"
+                >
+                    <i class="bx bx-chat text-white text-lg"></i>
+                </div>
+                <div class="flex flex-col">
+                    <span
+                        class="text-xs font-black text-fd-foreground tracking-tight"
+                        >Human Chat</span
+                    >
+                    <span
+                        class="text-[9px] font-bold text-fd-primary uppercase tracking-[0.2em] opacity-80"
+                        >My ID: {$auth.user?.id}</span
+                    >
+                </div>
+            </div>
+            <div class="flex items-center gap-1">
+                <button
+                    onclick={() => (isOpen = false)}
+                    class="w-7 h-7 rounded-lg hover:bg-fd-accent flex items-center justify-center transition-all text-fd-muted hover:text-fd-foreground"
+                    aria-label="Đóng chat"
+                    title="Đóng"
+                >
+                    <i class="bx bx-x text-lg"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="flex-1 flex overflow-hidden">
+            <!-- Sidebar: Conversation List -->
             <div
-                onmousedown={startDrag}
-                class="flex items-center justify-between px-4 py-2.5 border-b border-fd-border select-none cursor-grab active:cursor-grabbing bg-fd-primary/5"
+                class="w-40 border-r border-fd-border bg-fd-background/30 flex flex-col"
             >
-                <div class="flex items-center gap-2 pointer-events-none">
-                    <div
-                        class="w-2 h-2 rounded-full bg-fd-primary shadow-[0_0_8px_var(--primary-glow)] animate-pulse"
-                    ></div>
-                    <div class="flex flex-col">
-                        <span
-                            class="font-bold text-[10px] tracking-wider uppercase text-fd-primary"
+                <div class="p-2 border-b border-fd-border">
+                    <div class="relative">
+                        <input
+                            type="text"
+                            bind:value={searchUserId}
+                            placeholder="Nhập ID kết bạn..."
+                            class="w-full bg-fd-secondary border border-fd-border rounded-lg px-2 py-1.5 text-[10px] outline-none focus:ring-1 ring-fd-primary"
+                            onkeydown={(e) =>
+                                e.key === "Enter" && createByUserId()}
+                        />
+                        <button
+                            onclick={createByUserId}
+                            class="absolute right-1 top-1/2 -translate-y-1/2 text-fd-primary hover:scale-110 transition-transform p-1"
+                            aria-label="Thêm bạn"
+                            title="Thêm"
                         >
-                            Bio AI
-                        </span>
+                            <i class="bx bx-plus text-sm"></i>
+                        </button>
                     </div>
                 </div>
-                <div class="flex items-center gap-1">
-                    <button
-                        onmousedown={(e) => e.stopPropagation()}
-                        onclick={() => (autoPlayVoice = !autoPlayVoice)}
-                        class="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-fd-primary/10 {autoPlayVoice
-                            ? 'text-fd-primary'
-                            : 'text-fd-muted'} transition-all"
-                        title={autoPlayVoice
-                            ? "Auto-play: On"
-                            : "Auto-play: Off"}
-                    >
-                        <i
-                            class="bx {autoPlayVoice
-                                ? 'bx-volume-full'
-                                : 'bx-volume-mute'} text-lg"
-                        ></i>
-                    </button>
-                    <button
-                        onmousedown={(e) => e.stopPropagation()}
-                        onclick={createNewChat}
-                        class="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-fd-primary/10 text-fd-muted hover:text-fd-primary transition-all"
-                        title="New Chat"
-                    >
-                        <i class="bx bx-plus text-lg"></i>
-                    </button>
-                    <button
-                        onmousedown={(e) => e.stopPropagation()}
-                        onclick={close}
-                        class="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-fd-primary/10 text-fd-muted hover:text-fd-primary transition-all"
-                        aria-label="Close"
-                    >
-                        <i class="bx bx-x text-lg"></i>
-                    </button>
+                <div class="flex-1 overflow-y-auto custom-scrollbar">
+                    {#each conversations as conv}
+                        <button
+                            onclick={() => selectConversation(conv)}
+                            class="w-full p-2 flex items-center gap-2 hover:bg-fd-accent transition-all text-left border-b border-fd-border/30 {activeConv?.id ===
+                            conv.id
+                                ? 'bg-fd-primary/5 border-r-2 border-r-fd-primary'
+                                : ''}"
+                        >
+                            <Avatar
+                                url={conv.other_user.avatar_url}
+                                seed={conv.other_user.avatar_seed ||
+                                    conv.other_user.username}
+                                size={28}
+                                class="rounded-lg shrink-0"
+                            />
+                            <div class="flex-1 min-w-0">
+                                <div
+                                    class="text-[11px] font-bold text-fd-foreground truncate"
+                                >
+                                    {conv.other_user.username}
+                                </div>
+                                <div class="text-[9px] text-fd-muted truncate">
+                                    {conv.last_message.content || "No messages"}
+                                </div>
+                            </div>
+                        </button>
+                    {/each}
                 </div>
             </div>
 
-            <div class="flex flex-1 overflow-hidden">
-                <!-- Sidebar - Chat History -->
-                <div
-                    class="w-48 border-r border-fd-border bg-fd-background/30 flex flex-col overflow-hidden"
-                >
-                    <div class="p-2 border-b border-fd-border">
-                        <button
-                            onclick={createNewChat}
-                            class="w-full px-3 py-2 text-xs font-medium bg-fd-primary/10 hover:bg-fd-primary/20 text-fd-primary rounded-lg transition-all flex items-center justify-center gap-2"
-                        >
-                            <i class="bx bx-plus"></i>
-                            New Chat
-                        </button>
-                    </div>
+            <!-- Chat Area -->
+            <div class="flex-1 flex flex-col bg-white/40">
+                {#if activeConv}
                     <div
-                        class="flex-1 overflow-y-auto custom-scrollbar p-2 space-y-1"
+                        class="p-2 border-b border-fd-border flex items-center gap-2 bg-fd-background/40"
                     >
-                        {#each sessions as session}
-                            <div class="relative group">
-                                <button
-                                    onclick={() => switchSession(session.id)}
-                                    class="w-full px-3 py-2 text-left text-xs rounded-lg transition-all {currentSessionId ===
-                                    session.id
-                                        ? 'bg-fd-primary/20 text-fd-primary font-medium'
-                                        : 'hover:bg-fd-accent text-fd-muted'}"
-                                >
-                                    <div class="truncate pr-6">
-                                        {session.title}
-                                    </div>
-                                    <div class="text-[9px] opacity-60 mt-0.5">
-                                        {new Date(
-                                            session.created_at,
-                                        ).toLocaleDateString()}
-                                    </div>
-                                </button>
-                                <button
-                                    onclick={(e) => {
-                                        e.stopPropagation();
-                                        deleteSession(session.id);
-                                    }}
-                                    class="absolute right-2 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center rounded-md opacity-0 group-hover:opacity-100 hover:bg-red-500/20 text-red-500 transition-all"
-                                    title="Xóa chat"
-                                >
-                                    <i class="bx bx-trash text-sm"></i>
-                                </button>
-                            </div>
-                        {/each}
+                        <Avatar
+                            url={activeConv.other_user.avatar_url}
+                            seed={activeConv.other_user.avatar_seed ||
+                                activeConv.other_user.username}
+                            size={24}
+                            class="rounded-md"
+                        />
+                        <div class="text-[11px] font-black text-fd-foreground">
+                            {activeConv.other_user.username}
+                        </div>
+                        <div class="ml-auto flex items-center gap-1">
+                            <div
+                                class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"
+                            ></div>
+                            <span
+                                class="text-[9px] font-bold text-fd-muted uppercase tracking-widest"
+                                >Trực tuyến</span
+                            >
+                        </div>
                     </div>
-                </div>
 
-                <!-- Main Chat Area -->
-                <div class="flex-1 flex flex-col overflow-hidden">
-                    <!-- Messages Area -->
                     <div
                         bind:this={chatContainer}
-                        class="flex-1 overflow-y-auto p-4 flex flex-col gap-3 custom-scrollbar bg-fd-background/20"
+                        class="flex-1 overflow-y-auto p-3 flex flex-col gap-2 custom-scrollbar"
                     >
-                        {#each messages as msg, i}
+                        {#each messages as msg}
                             <div
-                                class="flex gap-2 {msg.role === 'user'
+                                class="flex gap-2 {msg.sender_id ===
+                                $auth.user.id
                                     ? 'flex-row-reverse'
                                     : ''}"
-                                transition:fade={{ duration: 200 }}
                             >
-                                <div class="max-w-[85%] group">
+                                <div class="max-w-[80%]">
                                     <div
-                                        class="px-3 py-2 rounded-xl text-xs leading-relaxed border {msg.role ===
-                                        'user'
-                                            ? 'bg-fd-primary text-white border-fd-primary shadow-lg shadow-fd-primary/20 font-medium'
-                                            : 'bg-fd-secondary border-fd-border text-fd-foreground'}"
+                                        class="px-2.5 py-1.5 rounded-xl text-[11px] leading-snug border {msg.sender_id ===
+                                        $auth.user.id
+                                            ? 'bg-fd-primary text-white border-fd-primary shadow-sm font-medium'
+                                            : 'bg-fd-secondary border-fd-border text-fd-foreground shadow-sm'}"
                                     >
                                         {msg.content}
                                     </div>
-                                    {#if msg.role === "model"}
-                                        <div
-                                            class="flex gap-1 mt-1 opacity-0 group-hover:opacity-100 transition-opacity"
-                                        >
-                                            <button
-                                                onclick={() =>
-                                                    copyMessage(msg.content)}
-                                                class="px-2 py-0.5 text-[9px] text-fd-muted hover:text-fd-primary flex items-center gap-1"
-                                                title="Copy"
-                                            >
-                                                <i class="bx bx-copy"></i> Copy
-                                            </button>
-                                            <button
-                                                onclick={() =>
-                                                    speak(msg.content)}
-                                                class="px-2 py-0.5 text-[9px] text-fd-muted hover:text-fd-primary flex items-center gap-1"
-                                                title="Nghe"
-                                            >
-                                                <i class="bx bx-volume-full"
-                                                ></i> Nghe
-                                            </button>
-                                        </div>
-                                    {/if}
+                                    <span
+                                        class="text-[8px] text-fd-muted mt-1 opacity-50 px-1 {msg.sender_id ===
+                                        $auth.user.id
+                                            ? 'text-right block'
+                                            : ''}"
+                                    >
+                                        {new Date(
+                                            msg.created_at,
+                                        ).toLocaleTimeString([], {
+                                            hour: "2-digit",
+                                            minute: "2-digit",
+                                        })}
+                                    </span>
                                 </div>
                             </div>
                         {/each}
                         {#if isLoading}
-                            <div class="flex gap-2" transition:fade>
-                                <div class="max-w-[85%]">
-                                    <div
-                                        class="px-3 py-2 rounded-xl text-xs bg-fd-secondary border border-fd-border"
-                                    >
-                                        <div class="flex gap-1">
-                                            <div
-                                                class="w-2 h-2 bg-fd-primary rounded-full animate-bounce"
-                                            ></div>
-                                            <div
-                                                class="w-2 h-2 bg-fd-primary rounded-full animate-bounce"
-                                                style="animation-delay: 0.1s"
-                                            ></div>
-                                            <div
-                                                class="w-2 h-2 bg-fd-primary rounded-full animate-bounce"
-                                                style="animation-delay: 0.2s"
-                                            ></div>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="flex justify-center p-4">
+                                <i
+                                    class="bx bx-loader-alt animate-spin text-fd-primary"
+                                ></i>
                             </div>
                         {/if}
                     </div>
 
-                    <!-- Input Area -->
-                    <div class="p-3 border-t border-fd-border bg-fd-card/50">
-                        <div
-                            class="relative flex items-center gap-2 bg-fd-background border border-fd-border rounded-xl px-3 py-2 shadow-inner group focus-within:border-fd-primary/50 transition-all"
-                        >
-                            <i
-                                class="bx bx-chevron-right text-fd-primary text-sm group-focus-within:translate-x-0.5 transition-transform"
-                            ></i>
-                            <input
-                                bind:value={inputValue}
-                                onkeydown={handleKeydown}
-                                placeholder="Ask anything..."
-                                disabled={isLoading}
-                                class="w-full bg-transparent border-none text-xs text-fd-foreground placeholder:text-fd-muted placeholder:opacity-50 focus:ring-0 p-0 font-medium disabled:opacity-50"
-                                autocomplete="off"
-                            />
-                            <div class="flex items-center gap-1.5">
-                                <button
-                                    onclick={toggleRecording}
-                                    class="p-1.5 rounded-lg transition-all {isRecording
-                                        ? 'bg-red-500 text-white animate-pulse'
-                                        : 'text-fd-muted hover:bg-fd-accent hover:text-fd-primary'}"
-                                    title={isRecording
-                                        ? "Đang nghe..."
-                                        : "Nói chuyện"}
-                                >
-                                    <i
-                                        class="bx {isRecording
-                                            ? 'bx-stop'
-                                            : 'bx-microphone'} text-sm"
-                                    ></i>
-                                </button>
-                                <button
-                                    onclick={sendMessage}
-                                    disabled={isLoading || !inputValue.trim()}
-                                    class="p-1.5 rounded-lg bg-fd-primary/10 text-fd-primary hover:bg-fd-primary hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                                >
-                                    <i class="bx bxs-send text-sm"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Resize Handle -->
-            <div
-                onmousedown={startResize}
-                class="absolute bottom-0 right-0 w-4 h-4 cursor-nwse-resize opacity-0 hover:opacity-100 transition-opacity"
-                title="Resize"
-            >
-                <i class="bx bx-move text-fd-muted text-xs"></i>
-            </div>
-        </div>
-
-        <!-- Mobile UI -->
-        <div
-            class="sm:hidden fixed inset-0 flex items-end justify-center pointer-events-none"
-        >
-            <div
-                transition:fly={{ y: 200, duration: 300 }}
-                class="pointer-events-auto w-full h-[75vh] border-t border-fd-border rounded-t-3xl shadow-2xl flex flex-col overflow-hidden bg-fd-card glass"
-            >
-                <div
-                    class="w-12 h-1 bg-fd-border rounded-full mx-auto mt-3 mb-1"
-                ></div>
-                <!-- Mobile Header -->
-                <div
-                    class="flex items-center justify-between px-5 py-3 border-b border-fd-border bg-fd-primary/5"
-                >
-                    <div class="flex items-center gap-2">
-                        <div
-                            class="w-2 h-2 rounded-full bg-fd-primary animate-pulse shadow-[0_0_8px_var(--primary-glow)]"
-                        ></div>
-                        <span
-                            class="font-bold text-xs text-fd-primary tracking-wider uppercase"
-                            >Bio AI</span
-                        >
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <button
-                            onclick={() => (autoPlayVoice = !autoPlayVoice)}
-                            class="w-9 h-9 flex items-center justify-center rounded-full {autoPlayVoice
-                                ? 'bg-fd-primary/20 text-fd-primary'
-                                : 'bg-fd-accent text-fd-muted'}"
-                        >
-                            <i
-                                class="bx {autoPlayVoice
-                                    ? 'bx-volume-full'
-                                    : 'bx-volume-mute'} text-xl"
-                            ></i>
-                        </button>
-                        <button
-                            onclick={createNewChat}
-                            class="w-9 h-9 flex items-center justify-center rounded-full bg-fd-accent text-fd-primary"
-                            aria-label="Tạo cuộc hội thoại mới"
-                        >
-                            <i class="bx bx-plus text-xl"></i>
-                        </button>
-                        <button
-                            onclick={close}
-                            class="w-9 h-9 flex items-center justify-center rounded-full bg-fd-accent text-fd-muted"
-                        >
-                            <i class="bx bx-x text-2xl"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="flex-1 overflow-y-auto p-5 flex flex-col gap-3">
-                    {#each messages as msg}
-                        <div
-                            class="flex gap-2 {msg.role === 'user'
-                                ? 'flex-row-reverse'
-                                : ''}"
-                        >
-                            <div class="max-w-[85%]">
-                                <div
-                                    class="px-4 py-3 rounded-2xl text-sm leading-relaxed border {msg.role ===
-                                    'user'
-                                        ? 'bg-fd-primary text-white border-fd-primary shadow-lg shadow-fd-primary/20'
-                                        : 'bg-fd-secondary border-fd-border text-fd-foreground'}"
-                                >
-                                    {msg.content}
-                                </div>
-                                {#if msg.role === "model"}
-                                    <div class="flex gap-2 mt-1 px-1">
-                                        <button
-                                            onclick={() => speak(msg.content)}
-                                            class="text-[10px] text-fd-muted flex items-center gap-1"
-                                        >
-                                            <i class="bx bx-volume-full"></i> Nghe
-                                        </button>
-                                        <button
-                                            onclick={() =>
-                                                copyMessage(msg.content)}
-                                            class="text-[10px] text-fd-muted flex items-center gap-1"
-                                        >
-                                            <i class="bx bx-copy"></i> Copy
-                                        </button>
-                                    </div>
-                                {/if}
-                            </div>
-                        </div>
-                    {/each}
-                    {#if isLoading}
-                        <div class="flex gap-2">
-                            <div
-                                class="px-4 py-3 rounded-2xl bg-fd-secondary border border-fd-border"
-                            >
-                                <div class="flex gap-1">
-                                    <div
-                                        class="w-2 h-2 bg-fd-primary rounded-full animate-bounce"
-                                    ></div>
-                                    <div
-                                        class="w-2 h-2 bg-fd-primary rounded-full animate-bounce"
-                                        style="animation-delay: 0.1s"
-                                    ></div>
-                                    <div
-                                        class="w-2 h-2 bg-fd-primary rounded-full animate-bounce"
-                                        style="animation-delay: 0.2s"
-                                    ></div>
-                                </div>
-                            </div>
-                        </div>
-                    {/if}
-                </div>
-
-                <div class="p-4 border-t border-fd-border bg-fd-card pb-safe">
                     <div
-                        class="relative flex items-center gap-3 bg-fd-background border border-fd-border rounded-2xl px-4 py-3"
+                        class="p-2 border-t border-fd-border bg-fd-background/40"
                     >
-                        <input
-                            bind:value={inputValue}
-                            onkeydown={handleKeydown}
-                            placeholder="Type a message..."
-                            disabled={isLoading}
-                            class="w-full bg-transparent border-none text-sm text-fd-foreground focus:ring-0 p-0 disabled:opacity-50"
-                            autocomplete="off"
-                        />
-                        <button
-                            onclick={toggleRecording}
-                            class="p-2 rounded-xl {isRecording
-                                ? 'bg-red-500 text-white animate-pulse'
-                                : 'text-fd-muted bg-fd-accent'}"
-                            aria-label={isRecording
-                                ? "Dừng ghi âm"
-                                : "Bắt đầu ghi âm"}
+                        <div
+                            class="flex items-end gap-2 bg-fd-secondary rounded-xl p-1.5 border border-fd-border/50"
+                        >
+                            <textarea
+                                bind:value={inputValue}
+                                placeholder="Viết tin nhắn..."
+                                class="flex-1 bg-transparent border-none outline-none text-[11px] font-medium py-1 px-2 max-h-24 min-h-[22px] resize-none"
+                                onkeydown={(e) => {
+                                    if (e.key === "Enter" && !e.shiftKey) {
+                                        e.preventDefault();
+                                        sendMessage();
+                                    }
+                                }}
+                            ></textarea>
+                            <button
+                                onclick={sendMessage}
+                                class="w-8 h-8 rounded-lg bg-fd-primary text-white flex items-center justify-center hover:scale-105 transition-all shadow-lg active:scale-95 disabled:opacity-50"
+                                disabled={!inputValue.trim()}
+                                aria-label="Gửi tin nhắn"
+                                title="Gửi (Enter)"
+                            >
+                                <i class="bx bxs-send"></i>
+                            </button>
+                        </div>
+                    </div>
+                {:else}
+                    <div
+                        class="flex-1 flex flex-col items-center justify-center p-8 text-center opacity-40"
+                    >
+                        <div
+                            class="w-16 h-16 bg-fd-primary/10 rounded-full flex items-center justify-center mb-4"
                         >
                             <i
-                                class="bx {isRecording
-                                    ? 'bx-stop'
-                                    : 'bx-microphone'} text-xl"
+                                class="bx bx-message-square-dots text-3xl text-fd-primary"
                             ></i>
-                        </button>
-                        <button
-                            onclick={sendMessage}
-                            disabled={isLoading || !inputValue.trim()}
-                            class="w-10 h-10 flex items-center justify-center rounded-xl bg-fd-primary text-white shadow-lg shadow-fd-primary/20 disabled:opacity-50"
-                            aria-label="Gửi tin nhắn"
+                        </div>
+                        <h4
+                            class="text-xs font-black text-fd-foreground mb-1 uppercase tracking-widest"
                         >
-                            <i class="bx bxs-send text-lg"></i>
-                        </button>
+                            Bắt đầu trò chuyện
+                        </h4>
+                        <p
+                            class="text-[10px] font-medium text-fd-muted leading-relaxed"
+                        >
+                            Nhập ID của người dùng khác ở cột bên trái<br />để
+                            băt đầu kết nối và học tập cùng nhau.
+                        </p>
                     </div>
-                </div>
+                {/if}
             </div>
         </div>
     </div>
 {/if}
 
 <style>
-    .custom-scrollbar::-webkit-scrollbar {
-        width: 6px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-track {
-        background: transparent;
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-        background: hsl(var(--fd-border));
-        border-radius: 3px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-        background: hsl(var(--fd-primary) / 0.5);
-    }
-
     .glass {
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(20px) saturate(180%);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
     }
 </style>

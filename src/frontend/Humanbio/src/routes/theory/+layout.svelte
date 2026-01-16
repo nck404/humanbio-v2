@@ -1,6 +1,5 @@
 <script>
     import Sidebar from "$lib/components/theory/Sidebar.svelte";
-    import ChatWidget from "$lib/components/theory/ChatWidget.svelte";
     import SearchModal from "$lib/components/theory/SearchModal.svelte";
     import TheoryNavbar from "$lib/components/theory/TheoryNavbar.svelte";
     import TableOfContents from "$lib/components/theory/TableOfContents.svelte";
@@ -8,12 +7,13 @@
     import { settings } from "$lib/stores/settings";
     import Highlighter from "$lib/components/theory/Highlighter.svelte";
     import { onMount, unmount } from "svelte";
+    import { isChatOpen, isSearchOpen } from "$lib/stores/ui";
+    import AIChatWidget from "$lib/components/theory/AIChatWidget.svelte";
 
     let { data, children } = $props();
 
-    let isSearchOpen = $state(false);
-    let isChatOpen = $state(false);
     let isSidebarOpen = $state(false); // Mobile sidebar toggle
+    let isAIChatOpen = $state(false);
     let scrollProgress = $state(0);
 
     function updateScrollProgress() {
@@ -40,15 +40,14 @@
     ></div>
 </div>
 
-<SearchModal tree={data.tree} bind:isOpen={isSearchOpen} />
-<ChatWidget bind:isOpen={isChatOpen} />
+<SearchModal tree={data.tree} bind:isOpen={$isSearchOpen} />
 
 <div class="min-h-screen bg-fd-background text-fd-foreground flex flex-col">
     <!-- Navbar -->
     <TheoryNavbar
-        onOpenSearch={() => (isSearchOpen = true)}
+        onOpenSearch={() => ($isSearchOpen = true)}
         onToggleSidebar={() => (isSidebarOpen = !isSidebarOpen)}
-        onOpenChat={() => (isChatOpen = true)}
+        onOpenChat={() => (isAIChatOpen = !isAIChatOpen)}
     />
 
     <div class="flex-1 max-w-[1400px] mx-auto w-full flex">
@@ -117,6 +116,7 @@
             <TableOfContents />
         </aside>
     </div>
+    <AIChatWidget bind:isOpen={isAIChatOpen} />
 </div>
 
 <style>

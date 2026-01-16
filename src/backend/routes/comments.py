@@ -14,8 +14,10 @@ def get_comments(slug):
         return {
             "id": c.id,
             "content": c.content,
+            "user_id": c.user.id,
             "username": c.user.username,
             "avatar_seed": c.user.avatar_seed or c.user.username,
+            "avatar_url": c.user.avatar_url,
             "created_at": c.created_at.isoformat(),
             "replies": [serialize_comment(reply) for reply in c.replies.order_by(Comment.created_at.asc()).all()]
         }
@@ -43,8 +45,10 @@ def post_comment():
         "comment": {
             "id": comment.id,
             "content": comment.content,
+            "user_id": comment.user.id,
             "username": comment.user.username,
             "avatar_seed": comment.user.avatar_seed or comment.user.username,
+            "avatar_url": comment.user.avatar_url,
             "parent_id": comment.parent_id,
             "created_at": comment.created_at.isoformat(),
             "replies": []

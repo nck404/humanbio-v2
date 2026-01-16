@@ -4,6 +4,7 @@
     import { fade, fly, slide } from "svelte/transition";
     import Avatar from "$lib/components/common/Avatar.svelte";
     import { API_URL } from "$lib/constants";
+    import { viewedUserId } from "$lib/stores/ui";
 
     let { slug } = $props();
 
@@ -253,13 +254,18 @@
         <div class="flex gap-4 pt-4">
             <!-- Thread Line with Dynamic Color -->
             <div class="flex flex-col items-center relative">
-                <div class="relative">
+                <button
+                    class="relative cursor-pointer transition-transform hover:scale-105 active:scale-95"
+                    onclick={() => viewedUserId.set(comment.user_id)}
+                    title="View Profile"
+                >
                     <Avatar
+                        url={comment.avatar_url}
                         seed={comment.avatar_seed}
                         size={depth > 0 ? 30 : 36}
                         class="rounded-full z-10 shadow-sm"
                     />
-                </div>
+                </button>
 
                 {#if (comment.replies && comment.replies.length > 0) || replyingTo === comment.id}
                     <div
@@ -275,11 +281,12 @@
             >
                 <div class="flex items-center justify-between mb-1.5">
                     <div class="flex items-center gap-2">
-                        <span
-                            class="text-[14px] font-black text-fd-foreground hover:text-fd-primary cursor-pointer transition-colors tracking-tight"
+                        <button
+                            onclick={() => viewedUserId.set(comment.user_id)}
+                            class="text-[14px] font-black text-fd-foreground hover:text-fd-primary cursor-pointer transition-colors tracking-tight text-left"
                         >
                             {comment.username}
-                        </span>
+                        </button>
                         {#if depth === 0}
                             <span
                                 class="px-1.5 py-0.5 rounded-md bg-fd-primary/5 text-[9px] font-black text-fd-primary uppercase tracking-tighter"

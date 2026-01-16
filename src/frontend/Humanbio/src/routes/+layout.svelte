@@ -9,8 +9,12 @@
 
 	import { settings } from "$lib/stores/settings";
 	import { API_URL } from "$lib/constants";
+	import ChatWidget from "$lib/components/theory/ChatWidget.svelte";
+	import SearchModal from "$lib/components/theory/SearchModal.svelte";
+	import UserProfileModal from "$lib/components/common/UserProfileModal.svelte";
+	import { isChatOpen, isSearchOpen } from "$lib/stores/ui";
 
-	let { children } = $props();
+	let { children, data } = $props();
 
 	// Protection logic
 	$effect(() => {
@@ -80,4 +84,7 @@
 	<main class="flex-grow">
 		{@render children()}
 	</main>
+	<ChatWidget bind:isOpen={$isChatOpen} />
+	<SearchModal tree={data.tree} bind:isOpen={$isSearchOpen} />
+	<UserProfileModal />
 </div>

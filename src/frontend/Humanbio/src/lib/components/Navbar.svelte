@@ -3,6 +3,7 @@
     import { settings } from "$lib/stores/settings";
     import { page } from "$app/stores";
     import { fade, slide, scale } from "svelte/transition";
+    import { isChatOpen } from "$lib/stores/ui";
     import Avatar from "$lib/components/common/Avatar.svelte";
     import { API_URL } from "$lib/constants";
 
@@ -150,16 +151,32 @@
         </div>
 
         <div class="flex items-center gap-2">
+            <!-- Chat AI Toggle -->
+            <button
+                onclick={() => ($isChatOpen = !$isChatOpen)}
+                class="p-1.5 text-fd-muted hover:text-fd-foreground hover:bg-fd-accent rounded-md transition-all relative"
+                aria-label="Mở Chat AI"
+                title="Chat AI"
+            >
+                <i class="bx bx-message-square-dots text-lg"></i>
+                {#if $isChatOpen}
+                    <div
+                        class="absolute top-1 right-1 w-1.5 h-1.5 bg-fd-primary rounded-full border border-white"
+                    ></div>
+                {/if}
+            </button>
+
             <!-- Settings Toggle -->
             <button
                 onclick={() => (isSettingsOpen = !isSettingsOpen)}
                 class="p-1.5 text-fd-muted hover:text-fd-foreground hover:bg-fd-accent rounded-md transition-all"
                 aria-label="Cài đặt giao diện"
+                title="Giao diện"
             >
                 <i class="bx bx-cog text-lg"></i>
             </button>
 
-            <div class="h-4 w-px bg-fd-border mx-1 opacity-50"></div>
+            <div class="h-4 w-px bg-fd-border mx-0.5 opacity-50"></div>
 
             {#if $auth.isAuthenticated}
                 <div class="relative">
@@ -170,7 +187,8 @@
                         aria-expanded={isUserMenuOpen}
                     >
                         <Avatar
-                            seed={user?.username}
+                            url={user?.avatar_url}
+                            seed={user?.avatar_seed || user?.username}
                             size={22}
                             class="rounded-sm shadow-inner"
                         />
@@ -199,7 +217,8 @@
                                 class="flex items-center gap-3 px-3 py-3 border-b border-fd-border mb-1 bg-fd-primary/5 rounded-t-lg"
                             >
                                 <Avatar
-                                    seed={user?.username}
+                                    url={user?.avatar_url}
+                                    seed={user?.avatar_seed || user?.username}
                                     size={36}
                                     class="rounded-lg shadow-sm"
                                 />
