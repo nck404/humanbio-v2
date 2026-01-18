@@ -1,76 +1,65 @@
 ---
-title: Cấu Trúc và Chức Năng của ADN
-slug: cau-truc-adn
+title: Cấu trúc và chức năng của ADN
+slug: cau-truc-adn-ct
 ---
 
-# ADN: Bản Thiết Kế Của Sự Sống
+# Cấu trúc và chức năng của ADN
 
-ADN (Axit Deoxyribonucleic) là vật chất di truyền ở cấp độ phân tử, mang thông tin quy định mọi đặc điểm của cơ thể sinh vật. Việc khám phá ra cấu trúc xoắn kép của ADN bởi Watson và Crick năm 1953 được coi là mốc son chói lọi nhất của sinh học hiện đại.
+Axit đêôxiribônuclêic, hay ADN (tiếng Anh: Deoxyribonucleic acid, DNA), là vật chất di truyền ở cấp độ phân tử, mang thông tin quy định cấu trúc của mọi loại protein trong cơ thể, và qua đó quyết định mọi tính trạng của sinh vật.
 
-## I. Cấu Trúc Hóa Học Của ADN
+## 1. Cấu trúc hóa học của ADN
 
-ADN là một đại phân tử hữu cơ, cấu tạo theo nguyên tắc đa phân.
+ADN là một đại phân tử hữu cơ được cấu tạo theo nguyên tắc đa phân, nghĩa là nó bao gồm nhiều đơn phân lặp lại. Mỗi đơn phân của ADN là một **nuclêôtit**.
 
-### 1. Đơn Phân (Nucleotit)
-Đơn vị cấu tạo nên ADN là **Nucleotit**. Mỗi nucleotit gồm 3 thành phần:
-*   Một phân tử đường 5 cacbon: Deoxyribose ($C_5H_{10}O_4$).
-*   Một nhóm Phosphate ($H_3PO_4$).
-*   Một trong 4 loại Bazơ Nitơ:
-    *   Adenine (**A**) - Kích thước lớn
-    *   Guanine (**G**) - Kích thước lớn
-    *   Thymine (**T**) - Kích thước nhỏ
-    *   Cytosine (**X** hoặc **C**) - Kích thước nhỏ
+### 1.1. Cấu tạo của một Nuclêôtit
 
-Do đó, tên gọi của các loại Nucleotit được gọi theo tên của Bazơ Nitơ (Nu loại A, T, G, X).
+Mỗi nuclêôtit (thường gọi là Nu) bao gồm 3 thành phần chính liên kết với nhau bằng các liên kết cộng hóa trị:
 
-### 2. Liên Kết Hóa Học
-*   **Liên kết Phosphodiester:** Các nucleotit trên cùng một mạch đơn liên kết với nhau bằng liên kết cộng hóa trị bền vững giữa đường của nu này với nhóm phosphate của nu kia, tạo thành chuỗi polynucleotit.
-*   **Liên kết Hydro:** Hai mạch đơn liên kết với nhau bằng liên kết hydro giữa các cặp bazơ đối diện. Dù liên kết hydro yếu, nhưng số lượng rất lớn giúp ADN vừa bền vững vừa linh hoạt (dễ tách đôi khi nhân đôi).
+1.  **Một phân tử đường 5-carbon:** Đường đêôxiribôzơ (C5H10O4).
+2.  **Một nhóm phôtphat:** Gốc axit phốtphoric (H3PO4), mang điện tích âm, tạo nên tính axit của phân tử.
+3.  **Một trong bốn loại bazơ nitơ:**
+    *   **Adenin (A)** và **Guanin (G):** thuộc nhóm purin, có cấu trúc vòng kép lớn.
+    *   **Timin (T)** và **Xitôzin (C/X):** thuộc nhóm pyrimidin, có cấu trúc vòng đơn nhỏ.
 
----
+Tên của mỗi loại nuclêôtit được gọi theo tên của bazơ nitơ mà nó chứa. Như vậy, có 4 loại nuclêôtit là A, T, G, C.
 
-## II. Cấu Trúc Không Gian Của ADN (Mô Hình Watson - Crick)
+### 1.2. Cấu trúc một mạch pôlinuclêôtit
 
-ADN là một chuỗi xoắn kép gồm 2 mạch đơn song song và ngược chiều nhau.
-*   **Chiều xoắn:** Xoắn đều quanh một trục giả định từ trái sang phải (xoắn phải).
-*   **Nguyễn tắc bổ sung (NTBS):** Các bazơ giữa 2 mạch liên kết cặp đôi đặc hiệu:
-    *   **A** liên kết với **T** bằng **2** liên kết hydro.
-    *   **G** liên kết với **X** bằng **3** liên kết hydro.
-    => Hệ quả: Nếu biết trình tự nu trên mạch này thì suy ra được trình tự nu trên mạch kia. Tỷ lệ $A = T$ và $G = X$.
+Các nuclêôtit liên kết với nhau để tạo thành một chuỗi dài gọi là chuỗi **pôlinuclêôtit**.
+*   Trên một mạch, các nuclêôtit nối với nhau bằng **liên kết cộng hóa trị** (liên kết phốtphođieste) vô cùng bền vững giữa đường của Nu này với nhóm phốtphat của Nu kế tiếp.
+*   Sự liên kết này tạo ra một khung xương đường-phốtphat vững chắc chạy dọc theo chiều dài của mạch ADN.
+*   Chuỗi pôlinuclêôtit có tính phân cực rõ rệt với một đầu là nhóm phốtphat (đầu 5') và đầu kia là đường tự do (đầu 3').
 
-*   **Thông số kích thước:**
-    *   Đường kính vòng xoắn: 20 Å (2 nm).
-    *   Chu kỳ xoắn: 34 Å (3.4 nm), gồm 10 cặp nucleotit.
-    *   Khoảng cách giữa 2 cặp nu liền kề: 3.4 Å.
+### 1.3. Tính đa dạng và đặc thù của ADN
 
----
+Mặc dù chỉ được cấu tạo từ 4 loại nuclêôtit, ADN của các loài sinh vật lại vô cùng đa dạng và đặc thù. Điều này được quyết định bởi số lượng, thành phần và đặc biệt là **trình tự sắp xếp** của các loại nuclêôtit trên mạch ADN. Trình tự này chính là thông tin di truyền dưới dạng mã hóa.
 
-## III. Chức Năng Của ADN
+## 2. Cấu trúc không gian của ADN (Mô hình Watson-Crick)
 
-### 1. Lưu Trữ Thông Tin Di Truyền
-Thông tin di truyền được mã hóa dưới dạng trình tự sắp xếp của các nucleotit trên mạch ADN (Mã di truyền).
-*   Chỉ với 4 loại ký tự (A, T, G, X) nhưng với số lượng hàng tỷ và cách sắp xếp khác nhau, ADN có thể mã hóa thông tin vô cùng đa dạng cho hàng triệu loài sinh vật.
-*   **Gen:** Là một đoạn ADN mang thông tin mã hóa cho một sản phẩm xác định (ARN hoặc Protein).
+Năm 1953, James Watson và Francis Crick đã công bố mô hình cấu trúc xoắn kép của ADN, một khám phá làm thay đổi cả lịch sử sinh học.
 
-### 2. Bảo Quản Thông Tin Di Truyền
-Nhờ cấu trúc xoắn kép bền vững và cơ chế sửa sai của các enzyme, thông tin trên ADN được bảo quản khá nguyên vẹn qua thời gian và giảm thiểu đột biến.
+*   **Chuỗi xoắn kép:** ADN gồm hai mạch pôlinuclêôtit chạy song song và xoắn đều quanh một trục tưởng tượng theo chiều từ trái sang phải (xoắn phải).
+*   **Hai mạch đối song song:** Một mạch có chiều 5' -> 3' thì mạch kia có chiều ngược lại 3' -> 5'.
+*   **Các thông số kỹ thuật:**
+    *   Đường kính vòng xoắn: 2nm.
+    *   Một chu kỳ xoắn dài 3.4nm, bao gồm đúng 10 cặp nuclêôtit.
+    *   Khoảng cách giữa hai cặp Nu liên tiếp là 0.34nm.
+*   **Nguyên tắc bổ sung (NTBS):** Các bazơ nitơ của hai mạch liên kết với nhau bằng các **liên kết hiđrô** theo từng cặp xác định:
+    *   **A liên kết với T bằng 2 liên kết hiđrô.**
+    *   **G liên kết với C bằng 3 liên kết hiđrô.**
 
-### 3. Truyền Đạt Thông Tin Di Truyền (Nhân Đôi ADN)
-Trước khi tế bào phân chia, ADN tự nhân đôi để sao chép thông tin di truyền cho thế hệ sau.
-*   **Nguyên tắc bán bảo toàn (Semi-conservative):** Trong mỗi phân tử ADN con mới tạo ra, có một mạch cũ của mẹ và một mạch mới được tổng hợp từ môi trường.
-*   **Quá trình:**
-    1.  Enzyme tháo xoắn tách 2 mạch đơn.
-    2.  Enzyme ADN Polymerase tổng hợp mạch mới dựa trên mạch khuôn theo nguyên tắc bổ sung.
-    3.  Kết quả: Từ 1 ADN mẹ tạo ra 2 ADN con giống hệt nhau và giống mẹ.
+**Hệ quả của NTBS:** Trong phân tử ADN, số lượng Nu loại A luôn bằng T, G luôn bằng C. Do đó, tỉ lệ (A+G)/(T+C) luôn bằng 1.
 
-### 4. Biểu Hiện Thông Tin Di Truyền (Phiên Mã & Dịch Mã)
-Thông tin trên gen được chuyển thành tính trạng của cơ thể thông qua con đường trung tâm (Central Dogma):
-**ADN** --(Phiên mã)--> **mARN** --(Dịch mã)--> **Protein** --(Quy định)--> **Tính trạng**
+## 3. Chức năng của ADN
 
----
+Cấu trúc tinh vi của ADN phục vụ hoàn hảo cho các chức năng sống quan trọng:
 
-## IV. Ứng Dụng Thực Tiễn
-Hiểu biết về ADN là nền tảng của công nghệ sinh học và y học hiện đại:
-1.  **Xét nghiệm ADN:** Xác định huyết thống, truy tìm tội phạm (pháp y).
-2.  **Chẩn đoán bệnh di truyền:** Phát hiện sớm các đột biến gây bệnh (Down, Thalassemia...).
-3.  **Công nghệ gen:** Tạo ra các sinh vật biến đổi gen (GMO) có năng suất cao, khả năng kháng bệnh tốt; sản xuất Insulin nhân tạo, Vaccine tái tổ hợp.
+1.  **Lưu giữ thông tin di truyền:** Thông tin di truyền được mã hóa dưới dạng trình tự nuclêôtit. Mỗi gen là một đoạn ADN mang thông tin cho một phân tử protein hoặc ARN.
+2.  **Truy truyền đạt thông tin di truyền:** Nhờ khả năng tự nhân đôi chính xác theo NTBS, ADN đảm bảo thông tin di truyền được truyền lại nguyên vẹn từ tế bào mẹ cho tế bào con trong quá trình phân bào.
+3.  **Biểu hiện thông tin di truyền:** Thông qua hai quá trình phiên mã và dịch mã, thông tin trên ADN được dịch thành các protein thực hiện chức năng và biểu hiện ra thành các tính trạng của cơ thể.
+4.  **Tạo nguồn biến dị:** Các đột biến trong cấu trúc ADN tạo ra các alen mới, là nguyên liệu sơ cấp cho quá trình tiến hóa và chọn giống.
+
+## 4. Tính bền vững và linh hoạt
+
+*   **Tính bền vững:** Nhờ các liên kết hóa trị bền chặt và hàng triệu liên kết hiđrô (tuy yếu nhưng số lượng cực lớn), ADN rất ổn định, giúp bảo vệ thông tin di truyền qua hàng ngàn thế hệ.
+*   **Tính linh hoạt:** Các liên kết hiđrô có thể dễ dàng bị bẻ gãy bởi enzyme để tách hai mạch ADN, cho phép thực hiện các quá trình sao chép và phiên mã một cách nhanh chóng và chính xác.

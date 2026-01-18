@@ -1,151 +1,89 @@
 ---
-title: Hệ Tuần Hoàn
+title: Hệ tuần hoàn
 slug: he-tuan-hoan
 ---
 
-# Hệ Tuần Hoàn: Cấu Trúc, Chức Năng và Sinh Lý Học
+# Hệ tuần hoàn
 
-Hệ tuần hoàn là một trong những hệ cơ quan quan trọng nhất của cơ thể người, đảm nhiệm chức năng vận chuyển máu, chất dinh dưỡng, khí (Oxy, CO2), hormone và các chất thải đến và đi từ các tế bào. Hệ thống này hoạt động như một mạng lưới giao thông phức tạp, đảm bảo sự sống và ổn định môi trường bên trong cơ thể (nội môi).
 
-Bài viết này sẽ đi sâu vào chi tiết cấu tạo giải phẫu, cơ chế hoạt động sinh lý, và các bệnh lý liên quan của hệ tuần hoàn.
+## 1. Chức năng của Hệ tuần hoàn
 
-## I. Tổng Quan Về Hệ Tuần Hoàn
+Hệ tuần hoàn, hay còn gọi là hệ tim mạch, có vai trò như một hệ thống giao thông của cơ thể. Chức năng chính của nó là **vận chuyển** các chất đi khắp cơ thể để duy trì sự sống. Cụ thể:
 
-Hệ tuần hoàn ở người là hệ tuàn hoàn kín và kép.
-*   **Kín:** Máu lưu thông liên tục trong các mạch kín (trừ một số đoạn rất ngắn ở hệ bạch huyết đổ vào).
-*   **Kép:** Có hai vòng tuần hoàn riêng biệt: vòng tuần hoàn nhỏ (phổi) và vòng tuần hoàn lớn (hệ thống).
+*   **Vận chuyển O2 và chất dinh dưỡng:** Đưa O2 từ phổi và chất dinh dưỡng từ hệ tiêu hóa đến từng tế bào.
+*   **Vận chuyển sản phẩm bài tiết:** Mang các chất thải như CO2 và sản phẩm chuyển hóa từ tế bào đến các cơ quan bài tiết (phổi, thận).
+*   **Vận chuyển hormone và kháng thể:** Vận chuyển các hormone từ tuyến nội tiết đến cơ quan đích và đưa các tế bào miễn dịch đi khắp cơ thể.
+*   **Điều hòa thân nhiệt:** Góp phần duy trì nhiệt độ cơ thể ổn định.
 
-Các thành phần chính bao gồm:
-1.  **Tim:** Máy bơm sinh học.
-2.  **Hệ mạch:** Động mạch, tĩnh mạch, và mao mạch.
-3.  **Dịch tuần hoàn:** Máu và dịch bạch huyết.
+## 2. Cấu tạo của Hệ tuần hoàn
 
----
+Hệ tuần hoàn bao gồm tim, hệ thống mạch máu và máu.
 
-## II. Cấu Tạo Của Tim
+### 2.1. Tim
 
-Tim là một khối cơ rỗng, hoạt động như một máy bơm hút và đẩy máu. Nó nằm trong lồng ngực, hơi lệch về phía trái.
+Tim là một khối cơ rỗng, hoạt động như một cái bơm để đẩy máu đi khắp cơ thể.
+*   **Cấu tạo:** Tim người có 4 ngăn:
+    *   **Tâm nhĩ phải:** Nhận máu giàu CO2 từ cơ thể.
+    *   **Tâm thất phải:** Bơm máu giàu CO2 lên phổi.
+    *   **Tâm nhĩ trái:** Nhận máu giàu O2 từ phổi về.
+    *   **Tâm thất trái:** Bơm máu giàu O2 đi nuôi khắp cơ thể. Thành tâm thất trái dày nhất vì phải tạo lực co bóp mạnh nhất.
+*   **Van tim:** Giữa các ngăn tim và giữa tim với các động mạch lớn có các van tim (van hai lá, van ba lá, van động mạch chủ, van động mạch phổi). Chức năng của chúng là đảm bảo máu chảy theo một chiều duy nhất và không bị chảy ngược.
+*   **Hệ thống dẫn truyền tự động:** Tim có khả năng co dãn tự động theo chu kỳ là nhờ một hệ thống các nút và sợi thần kinh đặc biệt, bao gồm nút xoang nhĩ (nút tạo nhịp chính), nút nhĩ thất, bó His và mạng Purkinje.
 
-### 1. Hình thái và Cấu trúc
-*   **Màng tim (Ngoại tâm mạc):** Lớp bao bọc bên ngoài, giúp bảo vệ và cố định tim. Có lớp dịch mỏng giúp giảm ma sát khi tim co bóp.
-*   **Thành tim:** Cấu tạo chủ yếu bởi cơ tim (myocardium).
-    *   Thành tâm thất dày hơn thành tâm nhĩ.
-    *   Thành tâm thất trái dày hơn thành tâm thất phải (do phải bơm máu đi khắp cơ thể với áp lực lớn).
-*   **Buồng tim:** Tim người có 4 ngăn:
-    *   **2 Tâm nhĩ (Atria):** Nằm ở phía trên, thành mỏng, nhận máu từ tĩnh mạch đưa về tim.
-    *   **2 Tâm thất (Ventricles):** Nằm ở phía dưới, thành dày, bơm máu vào động mạch.
+### 2.2. Hệ thống mạch máu
 
-### 2. Các Van Tim
-Hệ thống van giúp máu chảy theo một chiều nhất định, ngăn cản sự trào ngược.
-*   **Van nhĩ - thất:**
-    *   **Van 3 lá:** Giữa tâm nhĩ phải và tâm thất phải.
-    *   **Van 2 lá (Van mũ ni):** Giữa tâm nhĩ trái và tâm thất trái.
-*   **Van động mạch (Van bán nguyệt):**
-    *   **Van động mạch phổi:** Giữa tâm thất phải và động mạch phổi.
-    *   **Van động mạch chủ:** Giữa tâm thất trái và động mạch chủ.
+Là mạng lưới các ống dẫn máu đi khắp cơ thể.
+*   **Động mạch:** Dẫn máu từ tim đến các cơ quan. Thành động mạch dày, có tính đàn hồi cao để chịu được áp lực lớn do tim bơm máu. Càng xa tim, động mạch càng phân nhánh nhỏ dần.
+*   **Tĩnh mạch:** Dẫn máu từ các cơ quan trở về tim. Thành tĩnh mạch mỏng hơn động mạch. Đa số các tĩnh mạch (nhất là ở chi) có các **van một chiều** giúp máu không chảy ngược do tác động của trọng lực.
+*   **Mao mạch:** Là những mạch máu nhỏ nhất, nối liền giữa động mạch và tĩnh mạch. Thành mao mạch rất mỏng (chỉ gồm một lớp tế bào), là nơi diễn ra quá trình **trao đổi chất** giữa máu và tế bào.
 
-### 3. Hệ Thống Dẫn Truyền Tim
-Tim có khả năng tự co giãn nhịp nhàng nhờ hệ thống dẫn truyền tự động:
-*   **Nút xoang nhĩ (SA node):** Nằm ở tâm nhĩ phải, là "máy tạo nhịp" tự nhiên, phát xung điện khởi động nhịp tim.
-*   **Nút nhĩ thất (AV node):** Nhận tín hiệu từ nút xoang, làm chậm tín hiệu một chút trước khi truyền xuống thất.
-*   **Bó His và Mạng lưới Purkinje:** Truyền xung điện lan tỏa khắp cơ tâm thất, gây co bóp đồng bộ.
+### 2.3. Máu
 
----
-
-## III. Hệ Mạch Máu
-
-### 1. Động Mạch (Arteries)
-*   **Chức năng:** Dẫn máu từ tim đến các cơ quan.
-*   **Đặc điểm:** Thành dày, đàn hồi tốt (để chịu áp lực cao), lớp cơ trơn phát triển.
-*   **Vận tốc máu:** Cao nhất ở động mạch chủ và giảm dần.
-
-### 2. Tĩnh Mạch (Veins)
-*   **Chức năng:** Dẫn máu từ các cơ quan về tim.
-*   **Đặc điểm:** Thành mỏng hơn động mạch, độ đàn hồi kém hơn. Lòng tĩnh mạch rộng.
-*   **Van tĩnh mạch:** Các tĩnh mạch ở phần dưới cơ thể (chân) có các van một chiều để ngăn máu chảy ngược do trọng lực.
-
-### 3. Mao Mạch (Capillaries)
-*   **Chức năng:** Nơi diễn ra sự trao đổi chất giữa máu và tế bào.
-*   **Đặc điểm:** Thành rất mỏng (thường chỉ một lớp tế bào nội mô), đường kính nhỏ.
-*   **Vận tốc máu:** Chậm nhất (để đủ thời gian trao đổi chất).
-*   **Tổng tiết diện:** Lớn nhất trong hệ mạch.
-
----
-
-## IV. Sinh Lý Tuần Hoàn
-
-### 1. Chu Kỳ Tim
-Một chu kỳ hoạt động của tim (khoảng 0.8s ở người trưởng thành bình thường) gồm 3 pha:
-1.  **Pha nhĩ co (0.1s):** Tâm nhĩ co, đẩy máu xuống tâm thất.
-2.  **Pha thất co (0.3s):** Tâm thất co, đóng van nhĩ thất, mở van động mạch, máu bị đẩy vào động mạch.
-3.  **Pha giãn chung (0.4s):** Tim giãn nghỉ, máu từ tĩnh mạch chảy về tâm nhĩ và một phần xuống tâm thất.
-
-### 2. Huyết Áp
-*   **Định nghĩa:** Áp lực của máu lên thành mạch.
-*   **Phân loại:**
-    *   **Huyết áp tâm thu (tối đa):** Ứng với lúc tâm thất co (bình thường khoảng 110-120 mmHg).
-    *   **Huyết áp tâm trương (tối thiểu):** Ứng với lúc tâm thất giãn (bình thường khoảng 70-80 mmHg).
-*   **Biến động:** Huyết áp giảm dần từ Động mạch chủ -> Tiểu động mạch -> Mao mạch -> Tĩnh mạch -> Tĩnh mạch chủ.
-
-### 3. Vận Tốc Máu
-*   Tỉ lệ nghịch với chổng tiết diện của mạch.
-*   Nhanh nhất ở động mạch, chậm nhất ở mao mạch, và tăng dần lại ở tĩnh mạch.
-
----
-
-## V. Hai Vòng Tuần Hoàn
-
-### 1. Vòng Tuần Hoàn Nhỏ (Phổi)
-*   **Mục đích:** Trao đổi khí tại phổi (thải CO2, lấy O2).
-*   **Đường đi:** Tâm thất phải -> Động mạch phổi -> Mao mạch phổi (trao đổi khí) -> Tĩnh mạch phổi (máu giàu O2) -> Tâm nhĩ trái.
-
-### 2. Vòng Tuần Hoàn Lớn (Hệ Thống)
-*   **Mục đích:** Cung cấp O2 và dinh dưỡng cho tế bào, lấy đi CO2 và chất thải.
-*   **Đường đi:** Tâm thất trái -> Động mạch chủ -> Các động mạch nhỏ -> Mao mạch toàn cơ thể (trao đổi chất) -> Tĩnh mạch nhỏ -> Tĩnh mạch chủ (trên và dưới) -> Tâm nhĩ phải.
-
----
-
-## VI. Máu và Đông Máu
-
-### 1. Thành phần của máu
-*   **Huyết tương (55%):** Nước (90%), protein, khoáng chất, hormone, chất dinh dưỡng.
+Là một loại mô lỏng, bao gồm:
+*   **Huyết tương (55%):** Là phần dịch lỏng, màu vàng nhạt, chứa nước, protein (albumin, kháng thể, fibrinogen), chất dinh dưỡng, hormone, chất thải...
 *   **Các tế bào máu (45%):**
-    *   **Hồng cầu (RBC):** Hình đĩa lõm hai mặt, không nhân, chứa Hemoglobin vận chuyển O2 và CO2.
-    *   **Bạch cầu (WBC):** Bảo vệ cơ thể, miễn dịch (Thực bào, sản xuất kháng thể).
-    *   **Tiểu cầu (Platelets):** Tham gia quá trình đông máu.
+    *   **Hồng cầu:** Chiếm số lượng lớn nhất, không có nhân, chứa **hemoglobin (Hb)**, có chức năng vận chuyển O2 và một phần CO2.
+    *   **Bạch cầu:** Có nhiều loại (bạch cầu trung tính, lympho...), có chức năng bảo vệ cơ thể, chống lại nhiễm trùng (thuộc hệ miễn dịch).
+    *   **Tiểu cầu:** Là các mảnh tế bào, có vai trò quan trọng trong quá trình đông máu.
 
-### 2. Cơ chế đông máu
-Là cơ chế bảo vệ chống mất máu.
-1.  **Giai đoạn co mạch:** Mạch máu bị tổn thương co lại.
-2.  **Giai đoạn nút tiểu cầu:** Tiểu cầu kết dính vào vết thương tạo nút chặn tạm thời.
-3.  **Giai đoạn đông máu huyết tương:** Các yấu tố đông máu được hoạt hóa theo dây chuyền (thác đông máu), cuối cùng chuyển Fibrinogen (tan) thành Fibrin (không tan).
-4.  **Mạng lưới Fibrin:** Giam giữ các tế bào máu tạo thành cục máu đông bền vững.
+## 3. Hoạt động của Tim và Hệ mạch
 
----
+### 3.1. Chu kỳ hoạt động của Tim
 
-## VII. Các Bệnh Lý Tim Mạch Thường Gặp
+Mỗi nhịp tim là một chu kỳ hoạt động (chu tâm động), kéo dài khoảng 0,8 giây (ở người trưởng thành lúc nghỉ ngơi), bao gồm 3 pha:
+1.  **Pha tâm nhĩ co (0,1s):** Hai tâm nhĩ co, đẩy máu xuống hai tâm thất.
+2.  **Pha tâm thất co (0,3s):** Hai tâm thất co, đẩy máu vào động mạch phổi và động mạch chủ.
+3.  **Pha dãn chung (0,4s):** Cả tâm nhĩ và tâm thất đều dãn, máu từ tĩnh mạch được hút về tâm nhĩ.
+Nhờ có pha dãn chung chiếm gần một nửa chu kỳ, tim có thể hoạt động suốt đời mà không mệt mỏi.
 
-1.  **Tăng huyết áp (Cao huyết áp):**
-    *   "Kẻ giết người thầm lặng".
-    *   Làm tăng gánh nặng cho tim, gây tổn thương mạch máu.
-    *   Nguyên nhân: Ăn mặn, stress, béo phì, di truyền.
+### 3.2. Huyết áp
 
-2.  **Xơ vữa động mạch:**
-    *   Tích tụ Cholesterol (mảng xơ vữa) dưới lớp nội mô động mạch.
-    *   Làm hẹp lòng mạch, giảm lưu lượng máu.
-    *   Nguy cơ: Nhồi máu cơ tim, đột quỵ.
+Huyết áp là áp lực của máu tác động lên thành mạch.
+*   **Huyết áp tâm thu (tối đa):** Ứng với lúc tâm thất co.
+*   **Huyết áp tâm trương (tối thiểu):** Ứng với lúc tâm thất dãn.
 
-3.  **Nhồi máu cơ tim:**
-    *   Tắc nghẽn đột ngột mạch vành (mạch nuôi tim).
-    *   Vùng cơ tim bị thiếu máu sẽ hoại tử.
-    *   Triệu chứng: Đau thắt ngực dữ dội, lan ra tay trái, vã mồ hôi.
+### 3.3. Vận tốc máu
 
-4.  **Suy tim:**
-    *   Tim không còn đủ khả năng bơm máu đáp ứng nhu cầu cơ thể.
-    *   Triệu chứng: Khó thở, phù nề, mệt mỏi.
+Vận tốc máu chảy chậm nhất ở mao mạch. Điều này tạo điều kiện thuận lợi cho quá trình trao đổi chất giữa máu và tế bào diễn ra hiệu quả.
 
-## VIII. Lời Khuyên Cho Hệ Tuần Hoàn Khỏe Mạnh
-*   **Chế độ ăn uống:** Giảm muối, giảm chất béo bão hòa, ăn nhiều rau xanh, trái cây, cá.
-*   **Vận động:** Tập thể dục đều đặn ít nhất 30 phút mỗi ngày.
-*   **Lối sống:** Không hút thuốc lá, hạn chế rượu bia, kiểm soát căng thẳng.
-*   **Khám sức khỏe:** Đo huyết áp và xét nghiệm mỡ máu định kỳ.
+## 4. Các vòng tuần hoàn
+
+Hệ tuần hoàn của người là hệ tuần hoàn **kín** và **kép**.
+*   **Kín:** Máu lưu thông liên tục trong mạch máu kín.
+*   **Kép:** Có hai vòng tuần hoàn riêng biệt.
+
+### 4.1. Vòng tuần hoàn nhỏ (Vòng tuần hoàn phổi)
+
+*   **Mục đích:** Mang máu giàu CO2 đến phổi để trao đổi khí.
+*   **Đường đi:** Máu giàu CO2 từ **tâm thất phải** → **Động mạch phổi** → Mao mạch phổi (tại đây máu thải CO2, nhận O2) → Máu giàu O2 theo **Tĩnh mạch phổi** → **Tâm nhĩ trái**.
+
+### 4.2. Vòng tuần hoàn lớn (Vòng tuần hoàn cơ thể)
+
+*   **Mục đích:** Mang máu giàu O2 và chất dinh dưỡng đi nuôi cơ thể.
+*   **Đường đi:** Máu giàu O2 từ **tâm thất trái** → **Động mạch chủ** → Động mạch nhỏ hơn → Mao mạch ở các cơ quan (tại đây máu giao O2, nhận CO2) → Máu giàu CO2 theo **Tĩnh mạch chủ** → **Tâm nhĩ phải**.
+
+## 5. Môi trường trong của cơ thể và Hệ bạch huyết
+
+Môi trường trong của cơ thể bao gồm **máu, nước mô và bạch huyết**.
+*   **Nước mô:** Là dịch bao quanh các tế bào. Tại các mao mạch, một phần huyết tương thoát ra khỏi mạch máu tạo thành nước mô. Nước mô là môi trường trung gian cho sự trao đổi chất giữa máu và tế bào.
+*   **Hệ bạch huyết:** Bao gồm các mao mạch bạch huyết, hạch bạch huyết và mạch bạch huyết. Hệ này thu gom nước mô thừa và các sản phẩm khác (như lipid hấp thụ từ ruột) để đưa trở lại hệ tuần hoàn máu. Hạch bạch huyết còn là các "chốt chặn" miễn dịch quan trọng của cơ thể.
