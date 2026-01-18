@@ -17,6 +17,7 @@
 		"@tailwindcss/typography": "^0.5.19",
 		"@tailwindcss/vite": "^4.1.17",
 		"mdsvex": "^0.12.6",
+		"remark-gfm": "^4.0.1",
 		"svelte": "^5.45.6",
 		"tailwindcss": "^4.1.17",
 		"vite": "^7.2.6"

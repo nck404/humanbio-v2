@@ -168,4 +168,39 @@
     :global(.prose a:hover) {
         filter: brightness(1.2);
     }
+    
+    /* Table Styles */
+    :global(.prose table) {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        margin: 2rem 0;
+        border-radius: 0.75rem;
+        overflow: hidden;
+        border: 1px solid var(--border);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+    :global(.prose thead) {
+        background-color: var(--secondary);
+        color: var(--primary-foreground);
+    }
+    :global(.prose th) {
+        padding: 1rem;
+        text-align: left;
+        font-weight: 700;
+        color: var(--foreground);
+        border-bottom: 2px solid var(--border);
+        background-color: var(--primary-surface);
+    }
+    :global(.prose td) {
+        padding: 1rem;
+        border-bottom: 1px solid var(--border);
+        color: var(--muted-foreground);
+    }
+    :global(.prose tr:last-child td) {
+        border-bottom: none;
+    }
+    :global(.prose tr:hover td) {
+        background-color: var(--primary-surface);
+    }
 </style>
