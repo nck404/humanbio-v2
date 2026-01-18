@@ -19,16 +19,13 @@
 
         if (!selectedText.trim()) return;
 
-        // Create a wrapper span
         const span = document.createElement("span");
         span.className = `highlight-v${key}`;
         span.textContent = selectedText;
 
-        // Replace selected text with the span
         range.deleteContents();
         range.insertNode(span);
 
-        // Clear selection
         sel.removeAllRanges();
     }
 </script>

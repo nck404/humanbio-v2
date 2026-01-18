@@ -24,12 +24,12 @@
             >
                 <span
                     class="text-white bg-fd-primary px-3 py-1 rounded-full shadow-lg shadow-fd-primary/20 scale-105"
-                    >Theory</span
+                    >Lý thuyết</span
                 >
                 <i class="bx bx-chevron-right opacity-30 text-xs"></i>
                 <span
                     class="line-clamp-1 max-w-[150px] text-fd-foreground bg-fd-secondary px-3 py-1 rounded-full border border-fd-border font-bold"
-                    >Human Biology Basics</span
+                    >Sinh học</span
                 >
             </div>
         </div>

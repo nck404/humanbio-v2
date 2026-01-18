@@ -75,15 +75,14 @@
             <h1
                 class="text-6xl font-[1000] text-fd-foreground tracking-tighter leading-none"
             >
-                Medical <br /><span class="text-fd-primary italic"
-                    >Assessments</span
+                Humainbio<br /><span class="text-fd-primary italic"
+                    >Moctest</span
                 >
             </h1>
             <p
                 class="text-fd-muted font-medium max-w-md text-base leading-relaxed"
             >
-                Validate your clinical knowledge with our curated mock tests.
-                Grouped by biological systems.
+                Kiểm tra kiến thức của bạn bằng các bài
             </p>
         </div>
 
@@ -95,7 +94,7 @@
                 type="text"
                 bind:value={searchQuery}
                 oninput={fetchTests}
-                placeholder="Search by system or topic..."
+                placeholder="Tìm kiếm bài kiểm tra.."
                 class="w-full bg-fd-secondary/30 border border-fd-border rounded-[2rem] pl-14 pr-6 py-4 text-fd-foreground font-black placeholder:text-fd-muted/50 focus:ring-4 focus:ring-fd-primary/10 focus:border-fd-primary transition-all outline-none"
             />
         </div>

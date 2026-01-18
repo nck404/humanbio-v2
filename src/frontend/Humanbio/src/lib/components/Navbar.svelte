@@ -361,10 +361,10 @@
                     <div class="space-y-1">
                         <span
                             class="text-xs font-black text-fd-foreground uppercase tracking-tight"
-                            >Màu sắc điểm nhấn</span
+                            >Main color</span
                         >
                         <p class="text-[11px] text-fd-muted font-medium">
-                            Xác định màu tương tác chính của bạn
+                            chọn màu mà bạn thích
                         </p>
                     </div>
                 </div>
@@ -450,10 +450,10 @@
                                     : 'text-fd-muted hover:text-fd-foreground hover:bg-white/50'}"
                             >
                                 {font === "sans"
-                                    ? "KHÔNG CHÂN"
+                                    ? "Normal"
                                     : font === "serif"
-                                      ? "CÓ CHÂN"
-                                      : "MÃ HÓA"}
+                                      ? "Thư pháp"
+                                      : "Monospace"}
                             </button>
                         {/each}
                     </div>

@@ -11,16 +11,16 @@
             class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-fd-primary/10 border border-fd-primary/20 text-fd-primary text-[10px] font-bold uppercase tracking-widest mb-6"
         >
             <i class="bx bxs-book-open"></i>
-            Knowledge Base
+            Kho lý thuyết
         </div>
         <h1
             class="text-5xl md:text-6xl font-black tracking-tight text-fd-foreground mb-6"
         >
-            Master Human <span class="text-gradient">Biology</span>
+            <span class="text-gradient">Sinh</span> Học
         </h1>
         <p class="text-lg text-fd-muted leading-relaxed max-w-2xl mx-auto">
-            Explore deep dives into physiology, genetics, and anatomy. Selective
-            insights categorized for efficient learning and rapid mastery.
+            Khám phá sâu về sinh lý học, di truyền học và giải phẫu học. Những
+            hiểu biết chọn lọc được phân loại để học tập hiệu quả
         </p>
     </div>
 
@@ -33,10 +33,9 @@
             >
                 <i class="bx bx-subdirectory-right text-2xl"></i>
             </div>
-            <h3 class="text-xl font-bold mb-2">Structured Path</h3>
+            <h3 class="text-xl font-bold mb-2">Cấu trúc rõ ràng</h3>
             <p class="text-sm text-fd-muted font-medium">
-                Use the sidebar to navigate through hierarchical lessons
-                designed by experts.
+                Sử dụng menu bên trái để chọn bài học và thông tin,
             </p>
         </div>
 
@@ -50,14 +49,14 @@
             </div>
             <h3 class="text-xl font-bold mb-2">Search Anything</h3>
             <p class="text-sm text-fd-muted font-medium">
-                Press <kbd
+                Nhấn <kbd
                     class="px-1.5 py-0.5 bg-fd-accent border border-fd-border rounded text-[10px]"
                     >⌘</kbd
                 >
                 <kbd
                     class="px-1.5 py-0.5 bg-fd-accent border border-fd-border rounded text-[10px]"
                     >K</kbd
-                > to find content across the entire library instantly.
+                > Để tìm kiếm thông tin bất kì trong lý thuyết
             </p>
         </div>
 
@@ -69,10 +68,10 @@
             >
                 <i class="bx bxs-bot text-2xl"></i>
             </div>
-            <h3 class="text-xl font-bold mb-2">AI Tutoring</h3>
+            <h3 class="text-xl font-bold mb-2">Humain AI</h3>
             <p class="text-sm text-fd-muted font-medium">
-                Stuck on a concept? Click the bot icon in the toolbar to ask our
-                biological assistant.
+                Nhấn vào icon bot để hỏi câu hỏi hoặc tìm kiếm thông tin, bot sẽ
+                trả lời cho bạn một cách nhanh chóng và chính sác nhất có thể
             </p>
         </div>
 
@@ -82,12 +81,13 @@
             <div
                 class="w-12 h-12 bg-fd-primary/10 rounded-xl flex items-center justify-center text-fd-primary mb-6 group-hover:scale-110 transition-transform"
             >
-                <i class="bx bxs-highlighter text-2xl"></i>
+                <i class="bx bx-reflect-horizontal text-2xl"></i>
             </div>
-            <h3 class="text-xl font-bold mb-2">Interactivity</h3>
+            <h3 class="text-xl font-bold mb-2">Tương tác</h3>
             <p class="text-sm text-fd-muted font-medium">
-                Highlight text, take notes, and interact with diagrams directly
-                in your browser.
+                Tương tác động với người dùng thông qua các công cụ tích hợp và
+                khả năng xử lý dữ liệu thời gian thực, giúp tạo ra trải nghiệm
+                phản hồi nhanh chóng và tự nhiên.
             </p>
         </div>
     </div>

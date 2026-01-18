@@ -20,19 +20,19 @@
                 class="flex items-center gap-2 text-fd-primary bg-fd-primary/10 px-3 py-1.5 rounded-full"
             >
                 <i class="bx bx-time-five"></i>
-                <span>Recently Modified</span>
+                <span>Đã cập nhập gần đây</span>
             </div>
             <div
                 class="flex items-center gap-2 text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-full border border-emerald-100"
             >
                 <i class="bx bx-book-reader"></i>
-                <span>10 min read</span>
+                <span>10 phút đọc</span>
             </div>
             <div
                 class="flex items-center gap-2 text-amber-600 bg-amber-50 px-3 py-1.5 rounded-full border border-amber-100"
             >
                 <i class="bx bx-bar-chart-alt-2"></i>
-                <span>Deep Analysis</span>
+                <span>Đã được kiểm định bởi hội đồng Admin</span>
             </div>
         </div>
     </header>

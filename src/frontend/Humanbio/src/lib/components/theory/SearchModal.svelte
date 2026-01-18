@@ -6,7 +6,6 @@
     let searchQuery = $state("");
     let inputEl;
 
-    // Flatten tree logic again for search
     function flatten(nodes) {
         let result = [];
         for (const node of nodes) {
@@ -78,7 +77,7 @@
                     bind:this={inputEl}
                     type="text"
                     bind:value={searchQuery}
-                    placeholder="Deep search medical library..."
+                    placeholder="Bắt đầu tìm kiếm trong thư viện Humainbio..."
                     class="w-full bg-transparent text-xl text-fd-foreground placeholder-fd-muted font-bold outline-none"
                     onkeydown={handleKeydown}
                 />
@@ -110,7 +109,7 @@
                                 >
                                 <span
                                     class="text-[11px] font-bold text-fd-muted opacity-60 uppercase tracking-wider"
-                                    >Theory Module</span
+                                    >Bài học lý thuyết</span
                                 >
                             </div>
                             <i
@@ -124,7 +123,7 @@
                                 class="bx bx-search-alt text-5xl text-fd-muted opacity-20"
                             ></i>
                             <p class="text-fd-muted font-bold">
-                                No clinical matches for "<span
+                                Không tìm thấy kết quả cho "<span
                                     class="text-fd-primary">{searchQuery}</span
                                 >"
                             </p>
@@ -138,7 +137,7 @@
                         <p
                             class="text-fd-muted font-black uppercase tracking-widest text-[11px]"
                         >
-                            Initialization Required... Start Typing
+                            Khởi tạo thành công... Start Typing
                         </p>
                     </div>
                 {/if}
