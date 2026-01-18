@@ -8,6 +8,7 @@
 
     let email = $state("");
     let password = $state("");
+    let showPassword = $state(false);
     let error = $state("");
     let loading = $state(false);
     let recaptchaToken = $state("");
@@ -105,12 +106,12 @@
                 <h2
                     class="text-4xl font-[900] text-fd-foreground tracking-tighter"
                 >
-                    Xác thực
+                    Đăng nhập
                 </h2>
                 <p
                     class="mt-3 text-sm text-fd-muted font-bold tracking-tight opacity-70"
                 >
-                    Cổng truy cập hệ thống Human Biology
+                    Cổng đăng nhập hệ thống Human Biology
                 </p>
             </div>
 
@@ -124,7 +125,7 @@
                 <div class="space-y-5">
                     <div class="space-y-2">
                         <label for="email-address" class="fd-label ml-1"
-                            >ID Truy cập</label
+                            >email</label
                         >
                         <div class="relative group">
                             <div
@@ -146,12 +147,12 @@
                     <div class="space-y-2">
                         <div class="flex items-center justify-between ml-1">
                             <label for="password" class="fd-label mb-0"
-                                >Mã bảo mật</label
+                                >mật khẩu</label
                             >
                             <a
                                 href="/forgot"
                                 class="text-[10px] font-black uppercase tracking-widest text-fd-primary hover:underline"
-                                >Quên mã?</a
+                                >Quên mật khẩu?</a
                             >
                         </div>
                         <div class="relative group">
@@ -162,12 +163,26 @@
                             </div>
                             <input
                                 id="password"
-                                type="password"
+                                type={showPassword ? "text" : "password"}
                                 required
-                                class="fd-input w-full !pl-12 !py-4 !rounded-2xl !bg-fd-secondary/30"
+                                class="fd-input w-full !pl-12 !pr-10 !py-4 !rounded-2xl !bg-fd-secondary/30"
                                 placeholder="••••••••"
                                 bind:value={password}
                             />
+                            <button
+                                type="button"
+                                class="absolute inset-y-0 right-4 flex items-center text-fd-muted hover:text-fd-primary transition-colors cursor-pointer"
+                                onclick={() => (showPassword = !showPassword)}
+                                aria-label={showPassword
+                                    ? "Hide password"
+                                    : "Show password"}
+                            >
+                                <i
+                                    class="bx {showPassword
+                                        ? 'bx-show'
+                                        : 'bx-hide'} text-xl"
+                                ></i>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -220,7 +235,7 @@
                         href="/register"
                         class="text-fd-foreground hover:text-fd-primary transition-colors font-black border-b border-fd-primary"
                     >
-                        Đăng ký thành viên
+                        Đăng ký tài khoản
                     </a>
                 </p>
             </div>

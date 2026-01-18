@@ -9,6 +9,8 @@
     let email = $state("");
     let password = $state("");
     let confirmPassword = $state("");
+    let showPassword = $state(false);
+    let showConfirmPassword = $state(false);
     let error = $state("");
     let success = $state("");
     let loading = $state(false);
@@ -100,12 +102,12 @@
                 <h2
                     class="text-4xl font-[900] text-fd-foreground tracking-tighter"
                 >
-                    Initialize
+                    Signup
                 </h2>
                 <p
                     class="mt-3 text-sm text-fd-muted font-bold tracking-tight opacity-70"
                 >
-                    Create your biological signature profile
+                    tạo tài khoản mới
                 </p>
             </div>
 
@@ -140,7 +142,7 @@
 
                     <div class="space-y-2">
                         <label for="email-address" class="fd-label ml-1"
-                            >Network Email</label
+                            >Email</label
                         >
                         <div class="relative group">
                             <div
@@ -160,31 +162,68 @@
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
-                        <div class="space-y-2">
+                        <div class="space-y-2 relative">
                             <label for="password" class="fd-label ml-1"
-                                >Key</label
+                                >Mật khẩu</label
                             >
-                            <input
-                                id="password"
-                                type="password"
-                                required
-                                class="fd-input w-full !py-4 !rounded-2xl !bg-fd-secondary/30"
-                                placeholder="••••"
-                                bind:value={password}
-                            />
+                            <div class="relative">
+                                <input
+                                    id="password"
+                                    type={showPassword ? "text" : "password"}
+                                    required
+                                    class="fd-input w-full !py-4 !pl-4 !pr-10 !rounded-2xl !bg-fd-secondary/30"
+                                    placeholder="••••"
+                                    bind:value={password}
+                                />
+                                <button
+                                    type="button"
+                                    class="absolute inset-y-0 right-3 flex items-center text-fd-muted hover:text-fd-primary transition-colors cursor-pointer"
+                                    onclick={() =>
+                                        (showPassword = !showPassword)}
+                                    aria-label={showPassword
+                                        ? "Hide password"
+                                        : "Show password"}
+                                >
+                                    <i
+                                        class="bx {showPassword
+                                            ? 'bx-show'
+                                            : 'bx-hide'} text-xl"
+                                    ></i>
+                                </button>
+                            </div>
                         </div>
-                        <div class="space-y-2">
+                        <div class="space-y-2 relative">
                             <label for="confirm-password" class="fd-label ml-1"
-                                >Sync</label
+                                >Nhập lại mật khẩu</label
                             >
-                            <input
-                                id="confirm-password"
-                                type="password"
-                                required
-                                class="fd-input w-full !py-4 !rounded-2xl !bg-fd-secondary/30"
-                                placeholder="••••"
-                                bind:value={confirmPassword}
-                            />
+                            <div class="relative">
+                                <input
+                                    id="confirm-password"
+                                    type={showConfirmPassword
+                                        ? "text"
+                                        : "password"}
+                                    required
+                                    class="fd-input w-full !py-4 !pl-4 !pr-10 !rounded-2xl !bg-fd-secondary/30"
+                                    placeholder="••••"
+                                    bind:value={confirmPassword}
+                                />
+                                <button
+                                    type="button"
+                                    class="absolute inset-y-0 right-3 flex items-center text-fd-muted hover:text-fd-primary transition-colors cursor-pointer"
+                                    onclick={() =>
+                                        (showConfirmPassword =
+                                            !showConfirmPassword)}
+                                    aria-label={showConfirmPassword
+                                        ? "Hide password"
+                                        : "Show password"}
+                                >
+                                    <i
+                                        class="bx {showConfirmPassword
+                                            ? 'bx-show'
+                                            : 'bx-hide'} text-xl"
+                                    ></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -227,7 +266,7 @@
                             ></i>
                             Initializing...
                         {:else}
-                            Create Signature
+                            tạo tài khoản
                             <i
                                 class="bx bx-right-arrow-alt text-2xl group-hover:translate-x-2 transition-transform"
                             ></i>
@@ -241,12 +280,12 @@
 
             <div class="mt-8 pt-8 border-t border-fd-border/50 text-center">
                 <p class="text-xs text-fd-muted font-bold tracking-tight">
-                    Already part of the network?
+                    Đã có tài khoản?
                     <a
                         href="/login"
                         class="text-fd-foreground hover:text-fd-primary transition-colors font-black border-b border-fd-primary"
                     >
-                        Access Portal
+                        Đăng nhập
                     </a>
                 </p>
             </div>
