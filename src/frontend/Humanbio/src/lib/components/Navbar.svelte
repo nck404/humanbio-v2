@@ -11,6 +11,7 @@
 
     let isUserMenuOpen = $state(false);
     let isSettingsOpen = $state(false);
+    let isStudyMenuOpen = $state(false);
 
     function toggleUserMenu() {
         isUserMenuOpen = !isUserMenuOpen;
@@ -87,21 +88,66 @@
             </a>
 
             <div class="hidden md:flex items-center gap-8">
-                <a
-                    href="/theory"
-                    class="relative text-[13px] transition-all px-4 py-1.5 rounded-lg group {$page.url.pathname.startsWith(
-                        '/theory',
-                    )
-                        ? 'text-fd-primary bg-fd-primary/8 font-bold'
-                        : 'text-fd-muted hover:text-fd-foreground hover:bg-fd-accent font-bold'}"
-                >
-                    Lý thuyết
-                    {#if $page.url.pathname.startsWith("/theory")}
+                <!-- Study Dropdown (Lý thuyết & Giải phẫu) -->
+                <div class="relative group">
+                    <button
+                        onclick={() => (isStudyMenuOpen = !isStudyMenuOpen)}
+                        class="relative text-[13px] transition-all px-4 py-1.5 rounded-lg flex items-center gap-1.5 font-bold {$page.url.pathname.startsWith(
+                            '/theory',
+                        ) || $page.url.pathname.startsWith('/atlas')
+                            ? 'text-fd-primary bg-fd-primary/8'
+                            : 'text-fd-muted hover:text-fd-foreground hover:bg-fd-accent'}"
+                    >
+                        Học tập
+                        <i
+                            class="bx bx-chevron-down text-[10px] transition-transform {isStudyMenuOpen
+                                ? 'rotate-180'
+                                : ''}"
+                        ></i>
+                        {#if $page.url.pathname.startsWith("/theory") || $page.url.pathname.startsWith("/atlas")}
+                            <div
+                                class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-fd-primary rounded-full shadow-[0_0_8px_var(--primary-glow)]"
+                            ></div>
+                        {/if}
+                    </button>
+
+                    {#if isStudyMenuOpen}
+                        <button
+                            class="fixed inset-0 z-[105] cursor-default"
+                            onclick={() => (isStudyMenuOpen = false)}
+                            aria-label="Đóng menu"
+                        ></button>
                         <div
-                            class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-fd-primary rounded-full shadow-[0_0_8px_var(--primary-glow)]"
-                        ></div>
+                            transition:slide={{ duration: 150 }}
+                            class="absolute left-0 mt-2 w-48 glass border border-fd-border rounded-xl shadow-2xl p-2 z-[110] flex flex-col gap-1"
+                        >
+                            <a
+                                href="/theory"
+                                onclick={() => (isStudyMenuOpen = false)}
+                                class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] transition-colors {$page.url.pathname.startsWith(
+                                    '/theory',
+                                )
+                                    ? 'text-fd-primary bg-fd-primary/10 font-bold'
+                                    : 'text-fd-muted hover:text-fd-foreground hover:bg-fd-accent font-bold'}"
+                            >
+                                <i class="bx bx-book-open text-base"></i>
+                                Lý thuyết
+                            </a>
+                            <a
+                                href="/atlas"
+                                onclick={() => (isStudyMenuOpen = false)}
+                                class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] transition-colors {$page.url.pathname.startsWith(
+                                    '/atlas',
+                                )
+                                    ? 'text-fd-primary bg-fd-primary/10 font-bold'
+                                    : 'text-fd-muted hover:text-fd-foreground hover:bg-fd-accent font-bold'}"
+                            >
+                                <i class="bx bx-body text-base"></i>
+                                Giải phẫu
+                            </a>
+                        </div>
                     {/if}
-                </a>
+                </div>
                 <a
                     href="/tests"
                     class="relative text-[13px] transition-all px-4 py-1.5 rounded-lg group {$page.url.pathname.startsWith(
@@ -127,21 +173,6 @@
                 >
                     Diễn đàn
                     {#if $page.url.pathname.startsWith("/forum")}
-                        <div
-                            class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-fd-primary rounded-full shadow-[0_0_8px_var(--primary-glow)]"
-                        ></div>
-                    {/if}
-                </a>
-                <a
-                    href="/atlas"
-                    class="relative text-[13px] transition-all px-4 py-1.5 rounded-lg group {$page.url.pathname.startsWith(
-                        '/atlas',
-                    )
-                        ? 'text-fd-primary bg-fd-primary/8 font-bold'
-                        : 'text-fd-muted hover:text-fd-foreground hover:bg-fd-accent font-bold'}"
-                >
-                    Giải phẫu
-                    {#if $page.url.pathname.startsWith("/atlas")}
                         <div
                             class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-fd-primary rounded-full shadow-[0_0_8px_var(--primary-glow)]"
                         ></div>
