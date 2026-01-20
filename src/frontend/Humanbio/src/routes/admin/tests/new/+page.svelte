@@ -46,7 +46,7 @@
 
     async function saveTest() {
         if (!title || questions.length === 0) {
-            error = "Please add a title and at least one question";
+            error = "Vui lòng nhập tiêu đề và thêm ít nhất một câu hỏi";
             return;
         }
 
@@ -72,10 +72,10 @@
                 goto("/admin");
             } else {
                 const data = await res.json();
-                error = data.msg || "Failed to save test";
+                error = data.msg || "Lưu đề thi thất bại";
             }
         } catch (e) {
-            error = "Connection error";
+            error = "Lỗi kết nối hệ thống";
         } finally {
             loading = false;
         }
@@ -95,10 +95,10 @@
                 >
                     <i class="bx bx-left-arrow-alt text-2xl"></i>
                 </a>
-                <span class="fd-label mb-0">Test Creator</span>
+                <span class="fd-label mb-0">Trình biên soạn Đề thi</span>
             </div>
             <h1 class="text-5xl font-[900] text-fd-foreground tracking-tighter">
-                Design Assessment
+                Thiết kế Bài đánh giá
             </h1>
         </div>
         <button
@@ -109,7 +109,7 @@
             {#if loading}
                 <i class="bx bx-loader-alt animate-spin mr-2"></i>
             {/if}
-            Publish Test
+            Công bố Đề thi
         </button>
     </div>
 
@@ -120,50 +120,52 @@
         >
             <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
                 <div class="md:col-span-1">
-                    <label class="fd-label" for="test-title">Foundation</label>
+                    <label class="fd-label" for="test-title"
+                        >Thông tin Cơ bản</label
+                    >
                     <h2 class="text-xl font-black text-fd-foreground mb-2">
-                        Core Identity
+                        Định danh Bài thi
                     </h2>
                     <p class="text-fd-muted text-xs leading-relaxed">
-                        Provide a clear title and context for your medical
-                        assessment.
+                        Cung cấp tiêu đề và ngữ cảnh cụ thể cho bài đánh giá y
+                        sinh của bạn.
                     </p>
                 </div>
                 <div class="md:col-span-2 space-y-6">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label for="test-title" class="fd-label ml-1"
-                                >Title</label
+                                >Tiêu đề</label
                             >
                             <input
                                 id="test-title"
                                 bind:value={title}
                                 type="text"
-                                placeholder="e.g. Cardiovascular System"
+                                placeholder="VD: Hệ Tuần hoàn"
                                 class="fd-input w-full !py-3 !rounded-2xl"
                             />
                         </div>
                         <div>
                             <label for="test-cat" class="fd-label ml-1"
-                                >Folder / Category</label
+                                >Danh mục / Phân loại</label
                             >
                             <input
                                 id="test-cat"
                                 bind:value={category}
                                 type="text"
-                                placeholder="e.g. Cardiology"
+                                placeholder="VD: Tim mạch học"
                                 class="fd-input w-full !py-3 !rounded-2xl"
                             />
                         </div>
                     </div>
                     <div>
                         <label for="test-desc" class="fd-label ml-1"
-                            >Description</label
+                            >Mô tả chi tiết</label
                         >
                         <textarea
                             id="test-desc"
                             bind:value={description}
-                            placeholder="Briefly explain what this test covers..."
+                            placeholder="Giải thích ngắn gọn nội dung cốt lõi của bài thi này..."
                             class="fd-input w-full !py-3 !rounded-2xl h-24 resize-none"
                         ></textarea>
                     </div>
@@ -196,7 +198,9 @@
                                 ? 'bg-fd-primary text-white'
                                 : 'bg-emerald-500 text-white'} shadow-lg"
                         >
-                            {q.type.replace("_", " ")}
+                            {q.type === "multiple_choice"
+                                ? "Trắc nghiệm"
+                                : "Đúng / Sai"}
                         </span>
                     </div>
 
@@ -209,7 +213,7 @@
                         <h3
                             class="text-2xl font-black text-fd-foreground tracking-tight"
                         >
-                            Question Item
+                            Nội dung Câu hỏi
                         </h3>
                         <button
                             onclick={() => removeQuestion(q.id)}
@@ -224,19 +228,19 @@
                         <div class="space-y-6">
                             <div>
                                 <label for="q-text-{q.id}" class="fd-label ml-1"
-                                    >Inquiry</label
+                                    >Câu hỏi</label
                                 >
                                 <textarea
                                     id="q-text-{q.id}"
                                     bind:value={q.text}
-                                    placeholder="Pose your biological question..."
+                                    placeholder="Đặt câu hỏi thảo luận về sinh học tại đây..."
                                     class="fd-input w-full !py-4 !rounded-2xl h-32 resize-none text-base"
                                 ></textarea>
                             </div>
 
                             <div>
                                 <label class="fd-label ml-1" for="file-{q.id}"
-                                    >Visualization</label
+                                    >Hình ảnh minh họa</label
                                 >
                                 <div class="flex items-center gap-4">
                                     <input
@@ -255,14 +259,14 @@
                                             class="bx bx-image-add text-xl text-fd-primary"
                                         ></i>
                                         {q.image_data
-                                            ? "Change Image"
-                                            : "Add Illustration"}
+                                            ? "Thay đổi hình ảnh"
+                                            : "Thêm minh họa"}
                                     </label>
                                     {#if q.image_data}
                                         <button
                                             onclick={() => (q.image_data = "")}
                                             class="text-red-500 font-bold text-xs hover:underline"
-                                            >Remove</button
+                                            >Gỡ bỏ</button
                                         >
                                     {/if}
                                 </div>
@@ -285,7 +289,7 @@
                                 <label
                                     class="fd-label ml-1"
                                     for="q-opt-{q.id}-0"
-                                    >Categorical Options & Key</label
+                                    >Các phương án & Đáp án</label
                                 >
                                 <div class="space-y-3">
                                     {#each q.options as opt, optIdx}
@@ -315,7 +319,7 @@
                                             <input
                                                 id="q-opt-{q.id}-{optIdx}"
                                                 bind:value={q.options[optIdx]}
-                                                placeholder="Option {optIdx +
+                                                placeholder="Lựa chọn {optIdx +
                                                     1}"
                                                 class="fd-input flex-grow !rounded-xl !py-2.5 transition-all focus:ring-0 peer-checked:border-fd-primary/30"
                                             />
@@ -324,7 +328,7 @@
                                 </div>
                             {:else}
                                 <label class="fd-label ml-1"
-                                    >Binary Solution</label
+                                    >Đáp án Đúng/Sai</label
                                 >
                                 <div class="grid grid-cols-2 gap-4">
                                     <label
@@ -349,7 +353,7 @@
                                         </div>
                                         <span
                                             class="font-black text-sm uppercase tracking-widest"
-                                            >True</span
+                                            >Đúng</span
                                         >
                                     </label>
                                     <label
@@ -374,7 +378,7 @@
                                         </div>
                                         <span
                                             class="font-black text-sm uppercase tracking-widest"
-                                            >False</span
+                                            >Sai</span
                                         >
                                     </label>
                                 </div>
@@ -399,11 +403,11 @@
                 <div class="text-center">
                     <span
                         class="block font-[900] text-xl text-fd-foreground group-hover:text-fd-primary transition-colors"
-                        >Multiple Choice</span
+                        >Trắc nghiệm nhiều lựa chọn</span
                     >
                     <span
                         class="text-xs font-bold uppercase tracking-widest opacity-60"
-                        >Add a selective units</span
+                        >Thêm câu hỏi trắc nghiệm</span
                     >
                 </div>
             </button>
@@ -420,11 +424,11 @@
                 <div class="text-center">
                     <span
                         class="block font-[900] text-xl text-fd-foreground group-hover:text-emerald-500 transition-colors"
-                        >True / False</span
+                        >Đúng / Sai</span
                     >
                     <span
                         class="text-xs font-bold uppercase tracking-widest opacity-60"
-                        >Add a binary units</span
+                        >Thêm câu hỏi nhị phân</span
                     >
                 </div>
             </button>

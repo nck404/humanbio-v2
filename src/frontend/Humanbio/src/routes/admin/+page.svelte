@@ -67,7 +67,7 @@
     }
 
     async function deleteTest(id) {
-        if (!confirm("Are you sure you want to delete this test?")) return;
+        if (!confirm("Bạn có chắc chắn muốn xóa đề thi này không?")) return;
 
         try {
             const res = await fetch(`${API_URL}/api/admin/tests/${id}`, {
@@ -76,7 +76,7 @@
             });
             if (res.ok) await loadData();
         } catch (e) {
-            alert("Delete failed");
+            alert("Xóa thất bại");
         }
     }
 
@@ -91,7 +91,7 @@
             );
             if (res.ok) await loadData();
         } catch (e) {
-            alert("Promotion failed");
+            alert("Nâng quyền thất bại");
         }
     }
 </script>
@@ -102,12 +102,12 @@
     >
         <div in:fade={{ duration: 600 }}>
             <h1 class="text-6xl font-black text-fd-foreground tracking-tighter">
-                Console<span class="text-fd-primary">.</span>
+                Bảng Điều khiển<span class="text-fd-primary">.</span>
             </h1>
             <p
                 class="text-fd-muted mt-2 font-bold text-xs uppercase tracking-widest opacity-80"
             >
-                System Intelligence Hub
+                Trung tâm Quản trị Hệ thống
             </p>
         </div>
         <a
@@ -117,7 +117,7 @@
             <i
                 class="bx bx-plus text-xl group-hover:rotate-90 transition-transform"
             ></i>
-            <span>Register New Test</span>
+            <span>Khởi tạo Đề thi mới</span>
         </a>
     </div>
 
@@ -132,7 +132,7 @@
                 <i class="bx bx-atom text-3xl"></i>
             </div>
             <div>
-                <p class="fd-label !mb-0 text-fd-primary">Biological Units</p>
+                <p class="fd-label !mb-0 text-fd-primary">Học phần Sinh học</p>
                 <p
                     class="text-4xl font-black text-fd-foreground tracking-tighter"
                 >
@@ -149,7 +149,9 @@
                 <i class="bx bxs-group text-3xl"></i>
             </div>
             <div>
-                <p class="fd-label !mb-0 text-emerald-500">User Network</p>
+                <p class="fd-label !mb-0 text-emerald-500">
+                    Mạng lưới Người dùng
+                </p>
                 <p
                     class="text-4xl font-black text-fd-foreground tracking-tighter"
                 >
@@ -166,7 +168,9 @@
                 <i class="bx bxs-shield-alt-2 text-3xl"></i>
             </div>
             <div>
-                <p class="fd-label !mb-0 text-amber-500">Verified Access</p>
+                <p class="fd-label !mb-0 text-amber-500">
+                    Quyền Truy cập Hệ thống
+                </p>
                 <p
                     class="text-4xl font-black text-fd-foreground tracking-tighter"
                 >
@@ -184,10 +188,10 @@
                     class="fd-label mb-0 flex items-center gap-2 text-fd-foreground"
                 >
                     <i class="bx bx-dna text-fd-primary text-lg"></i>
-                    Library Genesis
+                    Thư viện Đề thi
                 </span>
                 <span class="text-[10px] font-bold text-fd-muted"
-                    >{stats.tests} TOTAL</span
+                    >{stats.tests} TỔNG CỘNG</span
                 >
             </div>
             <div
@@ -204,7 +208,7 @@
                         <div
                             class="p-16 text-center text-fd-muted text-sm font-medium"
                         >
-                            No modules found.
+                            Không tìm thấy học phần nào.
                         </div>
                     {:else}
                         {#each tests as test}
@@ -231,12 +235,11 @@
                                                 class="fd-badge fd-badge-primary !px-2 !py-0.5 !text-[8px] !bg-fd-primary/10 !text-fd-primary !border-none"
                                             >
                                                 <i class="bx bxs-folder mr-1"
-                                                ></i>{test.category ||
-                                                    "General"}
+                                                ></i>{test.category || "Chung"}
                                             </span>
                                             <span
                                                 class="fd-badge fd-badge-primary !px-2 !py-0.5 !text-[8px]"
-                                                >{test.question_count} Units</span
+                                                >{test.question_count} Câu hỏi</span
                                             >
                                         </div>
                                     </div>
@@ -271,10 +274,10 @@
                     class="fd-label mb-0 flex items-center gap-2 text-fd-foreground"
                 >
                     <i class="bx bxs-user-detail text-emerald-500 text-lg"></i>
-                    Personnel Registry
+                    Danh mục Nhân sự
                 </span>
                 <span class="text-[10px] font-bold text-fd-muted"
-                    >{stats.users} ENROLLED</span
+                    >{stats.users} THÀNH VIÊN</span
                 >
             </div>
             <div
@@ -311,7 +314,7 @@
                                             {#if user.is_admin}
                                                 <span
                                                     class="fd-badge fd-badge-primary !bg-fd-primary !text-white !text-[8px]"
-                                                    >Auth: Root</span
+                                                    >Quyền: Quản trị</span
                                                 >
                                             {/if}
                                         </h3>
@@ -327,7 +330,7 @@
                                         onclick={() => promoteUser(user.id)}
                                         class="fd-btn-ghost !text-[9px] !px-4 !py-2 !rounded-xl !border-fd-border hover:!border-fd-primary font-black uppercase tracking-widest transition-all"
                                     >
-                                        Elevate
+                                        Nâng quyền
                                     </button>
                                 {/if}
                             </div>

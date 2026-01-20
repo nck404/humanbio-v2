@@ -34,10 +34,10 @@
                 category = data.category || "General";
                 questions = data.questions;
             } else {
-                error = "Failed to load test data";
+                error = "Tải dữ liệu đề thi thất bại";
             }
         } catch (e) {
-            error = "Connection error";
+            error = "Lỗi kết nối hệ thống";
         } finally {
             loading = false;
         }
@@ -77,7 +77,7 @@
 
     async function saveTest() {
         if (!title || questions.length === 0) {
-            error = "Please add a title and at least one question";
+            error = "Vui lòng nhập tiêu đề và thêm ít nhất một câu hỏi";
             return;
         }
 
@@ -103,10 +103,10 @@
                 goto("/admin");
             } else {
                 const data = await res.json();
-                error = data.msg || "Failed to update test";
+                error = data.msg || "Cập nhật đề thi thất bại";
             }
         } catch (e) {
-            error = "Connection error";
+            error = "Lỗi kết nối hệ thống";
         } finally {
             saving = false;
         }
@@ -133,12 +133,12 @@
                     >
                         <i class="bx bx-left-arrow-alt text-2xl"></i>
                     </a>
-                    <span class="fd-label mb-0">Modifier Tool</span>
+                    <span class="fd-label mb-0">Công cụ Điều chỉnh</span>
                 </div>
                 <h1
                     class="text-5xl font-[900] text-fd-foreground tracking-tighter"
                 >
-                    Update <span class="text-fd-primary">Test</span>
+                    Cập nhật <span class="text-fd-primary">Đề thi</span>
                 </h1>
             </div>
             <button
@@ -149,7 +149,7 @@
                 {#if saving}
                     <i class="bx bx-loader-alt animate-spin mr-2"></i>
                 {/if}
-                Save Mutations
+                Lưu Thay đổi
             </button>
         </div>
 
@@ -161,21 +161,21 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
                     <div class="md:col-span-1">
                         <label class="fd-label" for="test-title"
-                            >Meta Data</label
+                            >Thông tin Mô tả</label
                         >
                         <h2 class="text-xl font-black text-fd-foreground mb-2">
-                            Configuration
+                            Cấu hình Bài thi
                         </h2>
                         <p class="text-fd-muted text-xs leading-relaxed">
-                            Refine the identity and classification of this
-                            diagnostic unit.
+                            Tinh chỉnh định danh và phân loại cho học phần khảo
+                            sát này.
                         </p>
                     </div>
                     <div class="md:col-span-2 space-y-6">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label for="test-title" class="fd-label ml-1"
-                                    >Title</label
+                                    >Tiêu đề</label
                                 >
                                 <input
                                     id="test-title"
@@ -186,20 +186,20 @@
                             </div>
                             <div>
                                 <label for="test-cat" class="fd-label ml-1"
-                                    >Folder / Category</label
+                                    >Danh mục / Phân loại</label
                                 >
                                 <input
                                     id="test-cat"
                                     bind:value={category}
                                     type="text"
-                                    placeholder="General"
+                                    placeholder="Chung"
                                     class="fd-input w-full !py-3 !rounded-2xl"
                                 />
                             </div>
                         </div>
                         <div>
                             <label for="test-desc" class="fd-label ml-1"
-                                >Description</label
+                                >Mô tả chi tiết</label
                             >
                             <textarea
                                 id="test-desc"
@@ -235,7 +235,9 @@
                                     ? 'bg-fd-primary'
                                     : 'bg-emerald-500'} text-white shadow-lg"
                             >
-                                {q.type.replace("_", " ")}
+                                {q.type === "multiple_choice"
+                                    ? "Trắc nghiệm"
+                                    : "Đúng / Sai"}
                             </span>
                         </div>
 
@@ -248,7 +250,7 @@
                             <h3
                                 class="text-2xl font-black text-fd-foreground tracking-tight"
                             >
-                                Question Unit
+                                Nội dung Câu hỏi
                             </h3>
                             <button
                                 onclick={() => removeQuestion(q.id)}
@@ -264,7 +266,7 @@
                                 <div>
                                     <label
                                         for="q-text-{q.id}"
-                                        class="fd-label ml-1">Inquiry</label
+                                        class="fd-label ml-1">Câu hỏi</label
                                     >
                                     <textarea
                                         id="q-text-{q.id}"
@@ -276,7 +278,8 @@
                                 <div>
                                     <label
                                         class="fd-label ml-1"
-                                        for="file-{q.id}">Visual Evidence</label
+                                        for="file-{q.id}"
+                                        >Minh họa Trực quan</label
                                     >
                                     <div class="flex items-center gap-4">
                                         <input
@@ -295,15 +298,15 @@
                                                 class="bx bx-image-add text-xl text-fd-primary"
                                             ></i>
                                             {q.image_data
-                                                ? "Replace Evidence"
-                                                : "Add Visualization"}
+                                                ? "Thay đổi hình ảnh"
+                                                : "Thêm minh họa Trực quan"}
                                         </label>
                                         {#if q.image_data}
                                             <button
                                                 onclick={() =>
                                                     (q.image_data = "")}
                                                 class="text-red-500 font-bold text-xs hover:underline"
-                                                >Purge</button
+                                                >Gỡ bỏ</button
                                             >
                                         {/if}
                                     </div>
@@ -326,7 +329,7 @@
                                     <label
                                         class="fd-label ml-1"
                                         for="q-opt-{q.id}-0"
-                                        >Options & Biological Key</label
+                                        >Các phương án & Đáp án</label
                                     >
                                     <div class="space-y-3">
                                         {#each q.options as opt, optIdx}
@@ -361,7 +364,7 @@
                                                         q.options[optIdx]
                                                     }
                                                     class="fd-input flex-grow !rounded-xl !py-2.5 transition-all outline-none"
-                                                    placeholder="Biological Option {optIdx +
+                                                    placeholder="Lựa chọn sinh học {optIdx +
                                                         1}"
                                                 />
                                             </div>
@@ -369,7 +372,7 @@
                                     </div>
                                 {:else}
                                     <label class="fd-label ml-1"
-                                        >Binary Solution</label
+                                        >Đáp án Đúng/Sai</label
                                     >
                                     <div class="grid grid-cols-2 gap-4">
                                         {#each ["True", "False"] as val}
@@ -402,7 +405,9 @@
                                                 </div>
                                                 <span
                                                     class="font-black text-sm uppercase tracking-widest"
-                                                    >{val}</span
+                                                    >{val === "True"
+                                                        ? "Đúng"
+                                                        : "Sai"}</span
                                                 >
                                             </label>
                                         {/each}
@@ -427,7 +432,7 @@
                     </div>
                     <span
                         class="font-[900] text-xl text-fd-foreground group-hover:text-fd-primary transition-colors"
-                        >Multiple Choice Unit</span
+                        >Trắc nghiệm nhiều lựa chọn</span
                     >
                 </button>
 
@@ -442,7 +447,7 @@
                     </div>
                     <span
                         class="font-[900] text-xl text-fd-foreground group-hover:text-emerald-500 transition-colors"
-                        >Binary True/False Unit</span
+                        >Câu hỏi Đúng/Sai</span
                     >
                 </button>
             </div>

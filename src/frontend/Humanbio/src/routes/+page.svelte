@@ -50,16 +50,17 @@
                             class="relative inline-flex rounded-full h-2 w-2 bg-fd-primary"
                         ></span>
                     </span>
-                    Trí tuệ thế hệ mới • Sinh học người
+                    Khai phá Tri thức • Giải mã Cơ thể người
                 </div>
 
                 <h1
                     class="text-6xl md:text-7xl lg:text-9xl font-black tracking-tighter text-fd-foreground mb-10 text-balance leading-[0.85] transition-all"
                     in:fly={{ y: 40, delay: 400 }}
                 >
-                    Học <span class="text-highlight">Sinh học</span><br />Với sự
+                    Khám phá <span class="text-highlight">Sinh học</span><br
+                    />Với sự
                     <span class="relative">
-                        Chuẩn xác
+                        Chuẩn xác Tuyệt đối
                         <div
                             class="absolute -bottom-2 left-0 right-0 h-4 bg-fd-primary/10 -rotate-1 rounded-full -z-10"
                         ></div>
@@ -70,10 +71,10 @@
                     class="text-xl md:text-2xl text-fd-muted mb-14 text-balance leading-relaxed max-w-xl font-medium opacity-90"
                     in:fly={{ y: 40, delay: 600 }}
                 >
-                    Một <span class="text-highlight"
-                        >phòng thí nghiệm cao cấp</span
-                    > dành cho việc nghiên cứu sinh học. Giải mã sự phức tạp của
-                    sự sống với các công cụ tối tân.
+                    Hệ sinh thái <span class="text-highlight"
+                        >học tập chuyên sâu</span
+                    > dành cho nghiên cứu sinh học. Giải mã sự kỳ diệu của sự sống
+                    thông qua các công nghệ tối tân.
                 </p>
 
                 <div
@@ -119,8 +120,8 @@
                     <p
                         class="text-fd-muted text-base leading-relaxed font-semibold opacity-70"
                     >
-                        Bản đồ lý thuyết thông minh kết nối các khái niệm phức
-                        tạp.
+                        Mạng lưới tri thức đa chiều, kết nối mạch lạc các khái
+                        niệm sinh học phức tạp.
                     </p>
                 </div>
 
@@ -134,13 +135,13 @@
                         <i class="bx bxs-microscope text-4xl"></i>
                     </div>
                     <h3 class="text-3xl font-black mb-4 tracking-tighter">
-                        Thực nghiệm
+                        Phân tích
                     </h3>
                     <p
                         class="text-fd-muted text-base leading-relaxed font-semibold opacity-70"
                     >
-                        Hệ thống đánh giá độ chính xác cao cho việc làm chủ kiến
-                        thức.
+                        Hệ thống đánh giá chuyên sâu giúp tối ưu hóa tiến trình
+                        làm chủ tri thức.
                     </p>
                 </div>
 
@@ -154,13 +155,13 @@
                         <i class="bx bxs-palette text-4xl"></i>
                     </div>
                     <h3 class="text-3xl font-black mb-4 tracking-tighter">
-                        Sắc thái
+                        Nhịp điệu
                     </h3>
                     <p
                         class="text-fd-muted text-base leading-relaxed font-semibold opacity-70"
                     >
-                        Không gian học tập năng động thích ứng với trạng thái
-                        của bạn.
+                        Môi trường học tập tương tác, tùy biến theo nhịp độ sinh
+                        học và nhu cầu cá nhân.
                     </p>
                 </div>
 
@@ -174,12 +175,13 @@
                         <i class="bx bxs-award text-4xl"></i>
                     </div>
                     <h3 class="text-3xl font-black mb-4 tracking-tighter">
-                        Cấp bậc
+                        Thành tựu
                     </h3>
                     <p
                         class="text-fd-muted text-base leading-relaxed font-semibold opacity-70"
                     >
-                        Gắn huy hiệu chứng nhận cho sự am hiểu sinh học của bạn.
+                        Hệ thống vinh danh ghi nhận lộ trình nghiên cứu và những
+                        danh hiệu độc bản.
                     </p>
                 </div>
             </div>
