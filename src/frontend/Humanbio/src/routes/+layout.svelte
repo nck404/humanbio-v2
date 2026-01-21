@@ -12,6 +12,7 @@
 	import ChatWidget from "$lib/components/theory/ChatWidget.svelte";
 	import SearchModal from "$lib/components/theory/SearchModal.svelte";
 	import UserProfileModal from "$lib/components/common/UserProfileModal.svelte";
+	import Cursor from "$lib/components/common/Cursor.svelte";
 	import { isChatOpen, isSearchOpen } from "$lib/stores/ui";
 
 	let { children, data } = $props();
@@ -87,4 +88,5 @@
 	<ChatWidget bind:isOpen={$isChatOpen} />
 	<SearchModal tree={data.tree} bind:isOpen={$isSearchOpen} />
 	<UserProfileModal />
+	<Cursor />
 </div>

@@ -12,7 +12,7 @@ timeout /t 2 /nobreak >nul
 
 echo.
 echo [2/2] Launching Visual Interface (SvelteKit)...
-start "HumanBio Frontend" cmd /k "cd src\frontend\Humanbio && pnpm run dev"
+start "HumanBio Frontend" cmd /k "cd src\frontend\Humanbio && npm run dev"
 
 echo.
 echo ==========================================
