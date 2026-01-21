@@ -106,14 +106,12 @@
                     <i class="bx bx-left-arrow-alt text-2xl"></i>
                 </a>
                 <div class="hidden sm:block">
-                    <h2
-                        class="text-sm font-black text-fd-foreground leading-tight line-clamp-1"
-                    >
-                        {test?.title || "Loading..."}
+                    <h2>
+                        {test?.title || "Đang tải dữ liệu..."}
                     </h2>
                     <span
                         class="text-[9px] font-bold text-fd-muted uppercase tracking-widest"
-                        >{test?.category} Diagnostic</span
+                        >Bài kiểm tra {test?.category}</span
                     >
                 </div>
             </div>
@@ -122,7 +120,7 @@
                 <div
                     class="flex justify-between text-[10px] font-black uppercase tracking-widest text-fd-muted mb-2"
                 >
-                    <span>Clinical Progress</span>
+                    <span>Tiến độ Làm bài</span>
                     <span>{Math.round(progress)}%</span>
                 </div>
                 <div
@@ -141,16 +139,16 @@
                         onclick={finishTest}
                         class="fd-btn-primary !py-2 !px-6 !text-[11px] !rounded-xl !font-black !uppercase !tracking-widest shadow-lg shadow-fd-primary/20"
                     >
-                        Finish Session
+                        Nộp bài sớm
                     </button>
                 {:else}
                     <div class="text-right">
                         <span
                             class="block text-[10px] font-black text-fd-muted uppercase tracking-widest"
-                            >Final Status</span
+                            >Trạng thái</span
                         >
                         <span class="text-fd-primary font-black text-lg"
-                            >EVALUATION COMPLETE</span
+                            >ĐÃ HOÀN THÀNH</span
                         >
                     </div>
                 {/if}
@@ -182,12 +180,12 @@
                         <h1
                             class="text-5xl font-[1000] text-fd-foreground tracking-tighter mb-4"
                         >
-                            Diagnostic Report
+                            Báo cáo Kết quả
                         </h1>
                         <p
                             class="text-fd-muted font-bold uppercase tracking-[0.2em] text-xs mb-8"
                         >
-                            Performance Metrics
+                            Thống kê Hiệu suất
                         </p>
 
                         <div
@@ -198,7 +196,7 @@
                             >
                                 <span
                                     class="block text-[10px] font-black text-fd-muted uppercase tracking-widest mb-2"
-                                    >Accuracy</span
+                                    >Độ chính xác</span
                                 >
                                 <span
                                     class="text-4xl font-[1000] text-fd-primary"
@@ -212,7 +210,7 @@
                             >
                                 <span
                                     class="block text-[10px] font-black text-fd-muted uppercase tracking-widest mb-2"
-                                    >Score</span
+                                    >Điểm số</span
                                 >
                                 <span
                                     class="text-4xl font-[1000] text-fd-foreground"
@@ -224,7 +222,7 @@
                             >
                                 <span
                                     class="block text-[10px] font-black text-fd-muted uppercase tracking-widest mb-2"
-                                    >Duration</span
+                                    >Thời gian</span
                                 >
                                 <span
                                     class="text-2xl font-[1000] text-fd-foreground"
@@ -237,7 +235,7 @@
                             onclick={() => window.location.reload()}
                             class="mt-12 fd-btn-primary !px-12 !py-4 !rounded-2xl !font-black !uppercase !tracking-widest"
                         >
-                            Retake Assessment
+                            Làm lại Bài thi
                         </button>
                     </div>
                     <!-- Bio Background Decor -->
@@ -251,7 +249,7 @@
                     <h2
                         class="text-2xl font-black text-fd-foreground tracking-tight ml-4"
                     >
-                        Detailed Breakdown
+                        Chi tiết Đánh giá
                     </h2>
                     {#each test.questions as q, i}
                         <div
@@ -285,7 +283,7 @@
                                         >
                                             <span
                                                 class="block text-[9px] font-black text-fd-muted uppercase tracking-widest mb-1"
-                                                >Your response</span
+                                                >Bạn chọn</span
                                             >
                                             <span
                                                 class="font-black {userAnswers[
@@ -294,7 +292,7 @@
                                                     ? 'text-emerald-500'
                                                     : 'text-red-500'}"
                                                 >{userAnswers[q.id] ||
-                                                    "NONE"}</span
+                                                    "KHÔNG CHỌN"}</span
                                             >
                                         </div>
                                         <div
@@ -302,7 +300,7 @@
                                         >
                                             <span
                                                 class="block text-[9px] font-black text-fd-muted uppercase tracking-widest mb-1"
-                                                >Correct Key</span
+                                                >Đáp án đúng</span
                                             >
                                             <span
                                                 class="font-black text-fd-primary"
@@ -332,7 +330,7 @@
                                 <div
                                     class="px-4 py-1.5 rounded-full bg-fd-primary/10 text-fd-primary text-[10px] font-black uppercase tracking-widest"
                                 >
-                                    Question {currentQuestionIdx + 1} of {test
+                                    Câu hỏi {currentQuestionIdx + 1} / {test
                                         .questions.length}
                                 </div>
                                 <div class="h-px flex-1 bg-fd-border/30"></div>
@@ -441,7 +439,7 @@
                                             <p
                                                 class="text-xs font-black uppercase tracking-[0.3em]"
                                             >
-                                                Neural processing in progress
+                                                Đang xử lý dữ liệu...
                                             </p>
                                         </div>
                                     {/if}
@@ -488,7 +486,7 @@
                             onclick={() => currentQuestionIdx++}
                             class="fd-btn-primary !px-12 !py-5 !rounded-2xl !font-black !uppercase !tracking-widest flex items-center gap-2 group shadow-xl shadow-fd-primary/20"
                         >
-                            Next Unit <i
+                            Câu tiếp theo <i
                                 class="bx bx-right-arrow-alt text-xl group-hover:translate-x-1 transition-transform"
                             ></i>
                         </button>
@@ -497,8 +495,7 @@
                             onclick={finishTest}
                             class="fd-btn-primary !bg-emerald-500 !px-12 !py-5 !rounded-2xl !font-black !uppercase !tracking-widest flex items-center gap-2 shadow-xl shadow-emerald-500/20"
                         >
-                            Submit Findings <i
-                                class="bx bx-check-double text-xl"
+                            Nộp Kết quả <i class="bx bx-check-double text-xl"
                             ></i>
                         </button>
                     {/if}
